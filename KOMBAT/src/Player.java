@@ -3,8 +3,16 @@ import java.util.Queue;
 public class Player {
     Queue<Minion> minion = new LinkedList<Minion>();
     protected double budget=10;
-
+    private int spawnleft;
     public Player() {
+    }
+
+    public int getSpawnleft() {
+        return spawnleft;
+    }
+
+    public int getBudget() {
+        return (int) this.budget;
     }
 
     protected void Spawnminion(int x,int y){
