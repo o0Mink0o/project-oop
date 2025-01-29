@@ -2,16 +2,15 @@ import java.util.LinkedList;
 import java.util.Queue;
 public class Player {
     Queue<Minion> minion = new LinkedList<Minion>();
-    double budget=10;
-    double spawncost=5;
-    double hexcost=5;
+    protected double budget=10;
 
     public Player() {
     }
 
     protected void Spawnminion(int x,int y){
         int ix=x-1,iy=y-1;
-        if(budget<spawncost){
+        double spawncost = 5;
+        if(budget< spawncost){
             System.out.println("Not enough money");
             return;
         }
@@ -23,10 +22,12 @@ public class Player {
             System.out.println("This is not your spawn hex");
             return;
         }
-        budget-=spawncost;
-        Minion minion1 = new Minion();
+        budget-= spawncost;
+        Minion minion1 = new Minion(this);
         Node.board[ix][iy].setIsminion(minion1);
         minion.add(minion1);
+        minion1.setCol(y);
+        minion1.setRow(x);
         System.out.println("Spawned minion at hex "+x+","+y);
 
 
@@ -34,7 +35,8 @@ public class Player {
 
     protected void buyspawmhex(int x,int y){
         int ix=x-1,iy=y-1;
-        if(budget<hexcost){
+        double hexcost = 5;
+        if(budget< hexcost){
             System.out.println("Not enough money");
             return;
         }
@@ -43,7 +45,7 @@ public class Player {
             return;
         }
         if(Node.board[ix][iy].canbuy(this)){
-            budget-=hexcost;
+            budget-= hexcost;
             Node.board[ix][iy].setOwnby(this);
             System.out.println("Buying hex "+x+","+y);
         }else{
