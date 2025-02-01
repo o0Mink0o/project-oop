@@ -7,57 +7,55 @@ public class Player {
     public Player() {
     }
 
-    public int getSpawnleft() {
+    protected int getSpawnleft() {
         return spawnleft;
     }
 
-    public int getBudget() {
+    protected int getBudget() {
         return (int) this.budget;
     }
 
     protected void Spawnminion(int x,int y){
-        int ix=x-1,iy=y-1;
         double spawncost = 5;
         if(budget< spawncost){
             System.out.println("Not enough money");
             return;
         }
-        if(Node.board[ix][iy].getIsminion()!=null){
-            System.out.println("There is minion on this hex already");
+        if(Hex.getHex(x,y).getIsminion()!=null){
+            System.out.println("There is minion on this board already");
             return;
         }
-        if(Node.board[ix][iy].getOwnby()!=this){
-            System.out.println("This is not your spawn hex");
+        if(Hex.getHex(x,y).getOwnby()!=this){
+            System.out.println("This is not your spawn board");
             return;
         }
         budget-= spawncost;
         Minion minion1 = new Minion(this);
-        Node.board[ix][iy].setIsminion(minion1);
+        Hex.getHex(x,y).setIsminion(minion1);
         minion.add(minion1);
         minion1.setCol(y);
         minion1.setRow(x);
-        System.out.println("Spawned minion at hex "+x+","+y);
+        System.out.println("Spawned minion at board "+x+","+y);
 
 
     }
 
     protected void buyspawmhex(int x,int y){
-        int ix=x-1,iy=y-1;
         double hexcost = 5;
         if(budget< hexcost){
             System.out.println("Not enough money");
             return;
         }
-        if(Node.board[ix][iy].getOwnby()!=null){
-            System.out.println("this hex already has owner");
+        if(Hex.getHex(x,y).getOwnby()!=null){
+            System.out.println("this board already has owner");
             return;
         }
-        if(Node.board[ix][iy].canbuy(this)){
+        if(Hex.getHex(x,y).canbuy(this)){
             budget-= hexcost;
-            Node.board[ix][iy].setOwnby(this);
-            System.out.println("Buying hex "+x+","+y);
+            Hex.getHex(x,y).setOwnby(this);
+            System.out.println("Buying board "+x+","+y);
         }else{
-            System.out.println("new spawnable hex must adjacent to the your spawnable hexes");
+            System.out.println("new spawnable board must adjacent to the your spawnable hexes");
         }
 
 

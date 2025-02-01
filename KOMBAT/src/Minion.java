@@ -5,33 +5,33 @@ public class Minion {
     private int col,row;
     final Player ownby;
 
-    public Minion(Player ownby) {
+    protected Minion(Player ownby) {
         this.ownby = ownby;
     }
 
-    public int getDef() {
+    protected int getDef() {
         return def;
     }
 
-    public int getHp() {
+    protected int getHp() {
         return hp;
     }
 
-    public int getRealCol() {
+    protected int getRealCol() {
         return col;
     }
 
-    public int getRealRow() {
+    protected int getRealRow() {
         return row;
     }
 
-    public void setCol(int col) {
+    protected void setCol(int col) {
         this.col = col;
     }
-    public void setRow(int Row) {
+    protected void setRow(int Row) {
         this.row = Row;
     }
-    public void setHp(int Hp) {
+    protected void setHp(int Hp) {
         this.hp = Hp;
     }
 
@@ -43,10 +43,10 @@ public class Minion {
             return;
         }
 
-        Node.board[row - 1][col - 1].setIsminion(null);
+        Hex.getHex(row,col).setIsminion(null);
         row = newPos / 10;
         col = newPos % 10;
-        Node.board[row - 1][col - 1].setIsminion(this);
+        Hex.getHex(row,col).setIsminion(this);
     }
 
     private void shoot(int direction,double cost) {
@@ -59,15 +59,15 @@ public class Minion {
         }
         row = target / 10;
         col = target % 10;
-        if(Node.board[row - 1][col - 1].getIsminion()==null){
+        if(Hex.getHex(row,col).getIsminion()==null){
             return;
         }
-        int hp=Node.board[row - 1][col - 1].getIsminion().getHp();
-        int def=Node.board[row - 1][col - 1].getIsminion().getDef();
+        int hp= Hex.getHex(row,col).getIsminion().getHp();
+        int def= Hex.getHex(row,col).getIsminion().getDef();
         if(cost-1<=def){
-            Node.board[row - 1][col - 1].getIsminion().setHp(hp-1);
+            Hex.getHex(row,col).getIsminion().setHp(hp-1);
         }else{
-            Node.board[row - 1][col - 1].getIsminion().setHp((int) (cost -1-def));
+            Hex.getHex(row,col).getIsminion().setHp((int) (cost -1-def));
         }
     }
 

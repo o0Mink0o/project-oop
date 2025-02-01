@@ -1,3 +1,4 @@
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -6,17 +7,17 @@ public class Main {
         for(int i=0;i<8;i++){
             for(int j=0;j<8;j++){
                 if ((i <= 1 && j <= 1) || (i == 0 && j == 2)) {
-                    Node.board[i][j] = new Node(player1);
+                    Hex.board[i][j] = new Hex(player1);
                     continue;
                 }
                 if((i >= 6 && j >= 6) || (i == 7 && j == 5)){
-                    Node.board[i][j] = new Node(player2);
+                    Hex.board[i][j] = new Hex(player2);
                     continue;
                 }
-                Node.board[i][j]=new Node();
+                Hex.board[i][j]=new Hex();
             }
         }
-        System.out.println(Node.board[0][0].getOwnby());
+        System.out.println(Hex.getHex(1,1).getOwnby());
 
         player1.Spawnminion(1,1);
         player1.Spawnminion(1,1);
@@ -27,10 +28,17 @@ public class Main {
 
         player2.Spawnminion(8,8);
         player2.buyspawmhex(6,8);
-        System.out.println(Node.board[5][7].getOwnby());
+        System.out.println(Hex.getHex(6,8).getOwnby());
         System.out.println(player2);
 
-        Node.board[0][0].getIsminion().move(4);
+        Hex.board[0][0].getIsminion().move(4);
+
+        ReadStrategy.readfile("C:\\Users\\nathd\\IdeaProjects\\project-oop\\KOMBAT\\src\\Sample_strat.txt");
+
+
+
+
+
 
 
     }
