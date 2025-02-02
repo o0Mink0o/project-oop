@@ -17,31 +17,21 @@ public class Main {
                 Hex.board[i][j]=new Hex();
             }
         }
-        System.out.println(Hex.getHex(1,1).getOwnby());
-
-        player1.Spawnminion(1,1);
-        player1.Spawnminion(1,1);
-        player1.Spawnminion(8,3);
-        player1.Spawnminion(1,2);
-        System.out.println(player1.minion);
-        player1.Spawnminion(2,2);
-
-        player2.Spawnminion(8,8);
-        player2.buyspawmhex(6,8);
-        System.out.println(Hex.getHex(6,8).getOwnby());
-        System.out.println(player2);
-        System.out.println(Hex.getHex(1,1).getIsminion());
-
-        printBoard(player1);
-
-        Strategy a= ReadStrategy.readfile("C:\\Users\\nathd\\IdeaProjects\\project-oop\\KOMBAT\\src\\testStategy.txt");
-        player1.executeTurn(a);
-        Strategy b= ReadStrategy.readfile("C:\\Users\\nathd\\IdeaProjects\\project-oop\\KOMBAT\\src\\Sample_strat.txt");
-        player2.executeTurn(b);
-
-        printBoard(player1);
-
+        int turn=10;
+        for(int i=0;i<turn/2;i++){
+            printBoard(player1);
+            Strategy a= ReadStrategy.readfile("C:\\Users\\nathd\\IdeaProjects\\project-oop\\KOMBAT\\src\\testStategy.txt");
+            System.out.println("Player 1's turn");
+            player1.executeTurn(a);
+            printBoard(player1);
+            Strategy b= ReadStrategy.readfile("C:\\Users\\nathd\\IdeaProjects\\project-oop\\KOMBAT\\src\\Sample_strat.txt");
+            System.out.println("Player 2's turn");
+            player2.executeTurn(b);
+            printBoard(player1);
+        }
     }
+
+
 
     private static void printBoard(Player player1) {
         for (int i = 0; i < 36; i++) {

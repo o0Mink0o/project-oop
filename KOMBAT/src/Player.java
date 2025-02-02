@@ -1,9 +1,11 @@
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Scanner;
+
 public class Player {
     Queue<Minion> minion = new LinkedList<Minion>();
     protected double budget=20;
-    private int spawnleft;
+    private int spawnleft=10;
     public Player() {
     }
 
@@ -13,8 +15,58 @@ public class Player {
     }
 
     protected void executeTurn(Strategy s) {
-        for(Minion m : minion) {
-            System.out.println(m.getRealRow()+","+m.getRealCol());
+        Scanner myObj = new Scanner(System.in);
+        String input;
+        int pos;
+        System.out.println("Do you want to buy spawn hex? (Y/N)");
+        input = myObj.nextLine();
+        while(!input.equalsIgnoreCase("N")){
+            if(!input.equalsIgnoreCase("Y")){
+                System.out.println("Invalid input please try again");
+                System.out.println("Do you want to spawn minion? (Y/N)");
+                input = myObj.nextLine();
+                continue;
+            }
+            System.out.println("Enter row,col where u want to buy (11->(1,1))");
+            pos = myObj.nextInt();
+            myObj.nextLine();
+            int x,y;
+            x=pos/10;
+            y=pos%10;
+            if(x<1||x>8||y<1||y>8){
+                System.out.println("Invalid row or col");
+                continue;
+            }
+            buyspawmhex(x, y);
+            System.out.println("Do you want to buy more spawn hex? (Y/N)");
+            input = myObj.nextLine();
+        }
+        System.out.println("Do you want to spawn minion? (Y/N)");
+        input = myObj.nextLine();
+        while(!input.equalsIgnoreCase("N")){
+            if(!input.equalsIgnoreCase("Y")){
+                System.out.println("Invalid input please try again");
+                System.out.println("Do you want to spawn minion? (Y/N)");
+                input = myObj.nextLine();
+                continue;
+            }
+            if(spawnleft==0){
+                System.out.println("You have 0 spawnleft");
+                break;
+            }
+            System.out.println("Enter row,col where u want to spawn (11->(1,1))");
+            pos = myObj.nextInt();
+            myObj.nextLine();
+            int x,y;
+            x=pos/10;
+            y=pos%10;
+            if(x<1||x>8||y<1||y>8){
+                System.out.println("Invalid row or col");
+                continue;
+            }
+            Spawnminion(x, y);
+            System.out.println("Do you want to spawn more minion? (Y/N)");
+            input = myObj.nextLine();
         }
         for (Minion m : minion) {
             if(m.getHp()<=0) {
@@ -23,9 +75,6 @@ public class Player {
             }
             Eval evaluator = new Eval(new Environment());
             evaluator.evaluate(s,m,this);
-        }
-        for(Minion m : minion) {
-            System.out.println(m.getRealRow()+","+m.getRealCol());
         }
     }
 
@@ -48,7 +97,7 @@ public class Player {
             return;
         }
         if(Hex.getHex(x,y).getOwnby()!=this){
-            System.out.println("This is not your spawn board");
+            System.out.println("This is not your spawn hex");
             return;
         }
         budget-= spawncost;
@@ -58,6 +107,7 @@ public class Player {
         minion1.setCol(y);
         minion1.setRow(x);
         System.out.println("Spawned minion at board "+x+","+y);
+        spawnleft--;
 
 
     }
