@@ -18,6 +18,11 @@ public class Tokenizer {
             "shoot", "then", "up", "upleft", "upright", "while"
     );
 
+    private static final Set<String> gamestatus_word = Set.of(
+            "ally","nearby","opponent","row","col","budget","int","maxbudget","spawnsleft","random"
+
+    );
+
     public Tokenizer(String src) {
         this.src = src;
         pos = 0;
@@ -58,7 +63,7 @@ public class Tokenizer {
 
         // ✅ ข้ามช่องว่าง (Whitespace)
         while (pos < src.length()) {
-            if (isSpace(src.charAt(pos))) {
+            if (isSpace(src.charAt(pos))||src.charAt(pos) == '\n') {
                 pos++;
             } else if (src.charAt(pos) == '#') { // ✅ ถ้าเจอ `#` ให้ข้ามทั้งบรรทัด
                 while (pos < src.length() && src.charAt(pos) != '\n') {
@@ -93,7 +98,7 @@ public class Tokenizer {
         // ✅ อ่านตัวดำเนินการและเครื่องหมายพิเศษ
         else {
             switch (c) {
-                case '+', '-', '*', '/', '%', '(', ')', '{', '}', '=', ';' -> {
+                case '+', '-', '*', '/', '%', '(', ')', '{', '}', '=', '^' -> {
                     s.append(c);
                     pos++;
                 }
@@ -125,6 +130,11 @@ public class Tokenizer {
             }
         }
         return true;
+    }
+
+    public boolean isGameStatus(String token) {
+        if (token == null || token.isEmpty()) return false;
+        return gamestatus_word.contains(token);
     }
 
     public boolean peek(String s) {

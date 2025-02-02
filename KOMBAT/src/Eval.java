@@ -1,17 +1,23 @@
 class Eval {
     private final Environment env;
+    private Minion m;
+    private Player p;
 
     public Eval(Environment env) {
         this.env = env;
     }
 
-    public void evaluate(Strategy strategy) {
+    public void evaluate(Strategy strategy, Minion newMinion,Player player) {
+        this.m=newMinion;
+        this.p=player;
+        if(strategy==null){return;}
         for (Statement stmt : strategy.statements) {
             execute(stmt);
         }
     }
 
     private void execute(Statement stmt) {
+        if (stmt instanceof DoneStatement) {return;}
         if (stmt instanceof AssignmentStatement) {
             executeAssignment((AssignmentStatement) stmt);
         } else if (stmt instanceof MoveCommand) {
@@ -36,11 +42,37 @@ class Eval {
 
     private void executeMove(MoveCommand stmt) {
         System.out.println("Moving " + stmt.direction);
+        this.m.move(getIntDirec(stmt.direction));
     }
 
     private void executeAttack(AttackCommand stmt) {
         long power = evaluateExpression(stmt.power);
         System.out.println("Shooting " + stmt.direction + " with power " + power);
+        this.m.shoot(getIntDirec(stmt.direction),power);
+    }
+
+    private int getIntDirec(String direction) {
+         switch (direction) {
+             case "up" -> {
+                 return 1;
+             }
+             case "upright" -> {
+                 return 2;
+             }
+             case "downright" -> {
+                 return 3;
+             }
+             case "down" -> {
+                 return 4;
+             }
+             case "downleft" -> {
+                 return 5;
+             }
+             case "upleft" -> {
+                 return 6;
+             }
+             default -> throw new RuntimeException("Unknown direction: " + direction);
+        }
     }
 
     private void executeIf(IfStatement stmt) {
@@ -52,7 +84,7 @@ class Eval {
     }
 
     private void executeWhile(WhileStatement stmt) {
-        while (evaluateExpression(stmt.condition) != 0) {
+        for (int i=0;evaluateExpression(stmt.condition) != 0&&i<10000;i++) {
             execute(stmt.body);
         }
     }
@@ -68,6 +100,8 @@ class Eval {
             return ((NumberLiteral) expr).value;
         } else if (expr instanceof Variable) {
             return env.get(((Variable) expr).name);
+        } else if (expr instanceof gameStatus) {
+            return evaluateGameStatus((gameStatus) expr);
         } else if (expr instanceof BinaryExpression) {
             return evaluateBinary((BinaryExpression) expr);
         } else if (expr instanceof InfoExpression) {
@@ -75,6 +109,27 @@ class Eval {
         } else {
             throw new RuntimeException("Unknown expression type: " + expr.getClass().getSimpleName());
         }
+    }
+
+    private long evaluateGameStatus(gameStatus expr) {
+        return switch (expr.name) {
+            case "ally" -> 0;
+            case "nearby" -> calNearby(expr.direction);
+            case "opponent" -> 2;
+            case "row" -> m.getRealRow();
+            case "col" -> m.getRealCol();
+            case "budget" -> p.getBudget();
+            case "int" -> 6;
+            case "maxbudget" -> 7;
+            case "spawnsleft" -> 8;
+            case "random" -> (int)(Math.random() * 1000);
+            default -> throw new RuntimeException("Unknown gameStatus: " + expr.name);
+        };
+    }
+
+    private Long calNearby(String direc) {
+        int direction = getIntDirec(direc);
+        return (long) m.getNearby(direction);
     }
 
     private long evaluateBinary(BinaryExpression expr) {
@@ -103,8 +158,8 @@ class Eval {
                 }
                 return left % right;
             }
-            case ">" -> {
-                return left>right? 1:0;
+            case "^" -> {
+                return (int) Math.pow(left,right);
             }
             case "<" -> {
                 return left<right? 1:0;

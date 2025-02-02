@@ -29,9 +29,16 @@ class StrategyParser {
             return parseAttackCommand();
         } else if (tokenizer.isIdentifier(tokenizer.peek())) {
             return parseAssignmentStatement();
+        } else if (tokenizer.peek("done")) {
+            return ParseDoneStatement();
         } else {
             throw new SyntaxError("Unexpected token: " + tokenizer.peek());
         }
+    }
+
+    private DoneStatement ParseDoneStatement() throws SyntaxError{
+        tokenizer.consume("done");
+        return new DoneStatement();
     }
 
     private AssignmentStatement parseAssignmentStatement() throws SyntaxError {
@@ -97,7 +104,7 @@ class StrategyParser {
 
     private Expression parseTerm() throws SyntaxError {
         Expression left = parseFactor();
-        while (tokenizer.peek("*") || tokenizer.peek("/") || tokenizer.peek("%")) {
+        while (tokenizer.peek("*") || tokenizer.peek("/") || tokenizer.peek("%")|| tokenizer.peek("^")) {
             String op = tokenizer.consume();
             Expression right = parseFactor();
             left = new BinaryExpression(op, left, right);
@@ -110,6 +117,11 @@ class StrategyParser {
             return new NumberLiteral(Long.parseLong(tokenizer.consume()));
         } else if (tokenizer.isIdentifier(tokenizer.peek())) {
             return new Variable(tokenizer.consume());
+        } else if (tokenizer.isGameStatus(tokenizer.peek())) {
+            if(tokenizer.peek().equals("nearby")){
+                return new gameStatus(tokenizer.consume(),tokenizer.consume());
+            }
+            return new gameStatus(tokenizer.consume());
         } else if (tokenizer.peek("(")) {
             tokenizer.consume("(");
             Expression expr = parseExpression();

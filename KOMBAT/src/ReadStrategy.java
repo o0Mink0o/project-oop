@@ -17,7 +17,7 @@ public class ReadStrategy {
 
 
 
-    public static void readfile(String filepath)  {
+    public static Strategy readfile(String filepath)  {
         Path file = Paths.get(filepath);
         Charset charset = StandardCharsets.UTF_8;
 
@@ -35,16 +35,20 @@ public class ReadStrategy {
                     continue;
                 }
                 stringBuilder.append(line);
+                stringBuilder.append("\n");
             }
+            Strategy ast;
             try{
-                Strategy ast = safeParse(stringBuilder.toString());
+                ast = safeParse(stringBuilder.toString());
+                return ast;
 
             }catch (Exception e){
-                System.out.println("Exception: "+e.getMessage()+line.trim());
+                System.out.println("Exception: "+e.getMessage());
             }
         } catch (IOException x) {
             System.err.println("Error reading file or Emtpy file");
         }
+        return null;
     }
 
     private static Strategy safeParse(String input) {

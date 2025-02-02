@@ -7,6 +7,24 @@ public class Player {
     public Player() {
     }
 
+
+    protected int getSpawnLeft() {
+        return spawnleft;
+    }
+
+    protected void executeTurn(Strategy s) {
+        for(Minion m : minion) {
+            System.out.println(m.getRealRow()+","+m.getRealCol());
+        }
+        for (Minion m : minion) {
+            Eval evaluator = new Eval(new Environment());
+            evaluator.evaluate(s,m,this);
+        }
+        for(Minion m : minion) {
+            System.out.println(m.getRealRow()+","+m.getRealCol());
+        }
+    }
+
     protected int getSpawnleft() {
         return spawnleft;
     }

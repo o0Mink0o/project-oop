@@ -10,7 +10,8 @@ class Environment {
 
     public long get(String identifier) {
         if (!variables.containsKey(identifier)) {
-            throw new RuntimeException("Variable not defined: " + identifier);
+            this.variables.put(identifier, 0L);
+            //throw new RuntimeException("Variable not defined: " + identifier);
         }
         return variables.get(identifier);
     }

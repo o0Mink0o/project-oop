@@ -30,15 +30,13 @@ public class Main {
         player2.buyspawmhex(6,8);
         System.out.println(Hex.getHex(6,8).getOwnby());
         System.out.println(player2);
+        System.out.println(Hex.getHex(1,1).getIsminion());
 
-        Hex.board[0][0].getIsminion().move(4);
+        Strategy a= ReadStrategy.readfile("C:\\Users\\nathd\\IdeaProjects\\project-oop\\KOMBAT\\src\\testStategy.txt");
+        player1.executeTurn(a);
 
-        ReadStrategy.readfile("C:\\Users\\nathd\\IdeaProjects\\project-oop\\KOMBAT\\src\\Sample_strat.txt");
-
-
-
-
-
+        Strategy b= ReadStrategy.readfile("C:\\Users\\nathd\\IdeaProjects\\project-oop\\KOMBAT\\src\\Sample_strat.txt");
+        player2.executeTurn(b);
 
 
     }

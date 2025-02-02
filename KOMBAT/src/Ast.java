@@ -5,15 +5,6 @@ abstract class Statement {}
 
 abstract class Expression {}
 
-// ✅ Strategy (โปรแกรมหลัก)
-class Strategy {
-    List<Statement> statements;
-
-    public Strategy(List<Statement> statements) {
-        this.statements = statements;
-    }
-}
-
 // ✅ Statement ประเภทต่างๆ
 class AssignmentStatement extends Statement {
     String identifier;
@@ -42,6 +33,7 @@ class AttackCommand extends Statement {
         this.power = power;
     }
 }
+
 
 class BlockStatement extends Statement {
     List<Statement> statements;
@@ -90,6 +82,20 @@ class Variable extends Expression {
     }
 }
 
+class gameStatus extends Expression {
+    String name;
+    String direction;
+
+    public gameStatus(String name) {
+        this.name = name;
+    }
+
+    public gameStatus(String name,String direction) {
+        this.name = name;
+        this.direction = direction;
+    }
+}
+
 class BinaryExpression extends Expression {
     String operator;
     Expression left;
@@ -110,4 +116,9 @@ class InfoExpression extends Expression {
         this.infoType = infoType;
         this.direction = direction;
     }
+}
+
+class DoneStatement extends Statement {
+
+    public DoneStatement() {}
 }
