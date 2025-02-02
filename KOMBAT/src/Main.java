@@ -34,9 +34,9 @@ public class Main {
 
         Strategy a= ReadStrategy.readfile("C:\\Users\\nathd\\IdeaProjects\\project-oop\\KOMBAT\\src\\testStategy.txt");
         player1.executeTurn(a);
-
         Strategy b= ReadStrategy.readfile("C:\\Users\\nathd\\IdeaProjects\\project-oop\\KOMBAT\\src\\Sample_strat.txt");
         player2.executeTurn(b);
+
 
         for(int i=1;i<=8;i++){
             for(int j=1;j<=8;j++){
@@ -44,7 +44,7 @@ public class Main {
                     System.out.print(" " );
                 }
                 if(Hex.getHex(i,j).getIsminion()!=null){
-                    if(Hex.getHex(i,j).getOwnby()==player1){
+                    if(Hex.getHex(i,j).getIsminion().ownby==player1){
                         System.out.print(1+" ");
                     }else{
                         System.out.print(2+" ");

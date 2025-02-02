@@ -43,15 +43,20 @@ public class Minion {
             this.ownby.budget -= 1;
         }
         int newPos = getDirection(direction, row, col);
+        int newPosX = newPos/10;
+        int newPosY = newPos%10;
 
         if (newPos == -1) {
             System.out.println("cant move to that direction");
             return -1;
         }
-
+        if (Hex.getHex(newPosX,newPosY).getIsminion()!=null) {
+            System.out.println("cant move to that direction");
+            return -1;
+        }
         Hex.getHex(row,col).setIsminion(null);
-        row = newPos / 10;
-        col = newPos % 10;
+        row = newPosX;
+        col = newPosY;
         Hex.getHex(row,col).setIsminion(this);
         return 1;
     }
