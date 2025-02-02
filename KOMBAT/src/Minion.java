@@ -36,18 +36,24 @@ public class Minion {
         this.hp = Hp;
     }
 
-    protected void move(int direction) {
+    protected int move(int direction) {
+        if(this.ownby.getBudget()<=0){
+            return 0;
+        }else{
+            this.ownby.budget -= 1;
+        }
         int newPos = getDirection(direction, row, col);
 
         if (newPos == -1) {
             System.out.println("cant move to that direction");
-            return;
+            return -1;
         }
 
         Hex.getHex(row,col).setIsminion(null);
         row = newPos / 10;
         col = newPos % 10;
         Hex.getHex(row,col).setIsminion(this);
+        return 1;
     }
 
     protected void shoot(int direction,double cost) {
@@ -114,9 +120,11 @@ public class Minion {
 
     protected int getNearby(int direction) {
         int target = getDirection(direction, row, col);
-        int targetRow = target / 10;
-        int targetCol = target % 10;
+        int targetRow ;
+        int targetCol ;
         for(int i=1;target!=-1;i++){
+            targetRow = target / 10;
+            targetCol = target % 10;
             if(Hex.getHex(targetRow, targetCol).getIsminion()!=null){
                 int hp = Hex.getHex(targetRow, targetCol).getIsminion().getHp();
                 int def= Hex.getHex(targetRow, targetCol).getIsminion().getDef();
@@ -125,9 +133,65 @@ public class Minion {
                 }
                 return hp*100+def*10+i;
             }
-            target = getDirection(direction, row, col);
+            target = getDirection(direction, targetRow, targetCol);
         }
         return 0;
     }
+
+
+
+    protected int calOpponent(Player player) {
+        int opponent=86,currentOpponent=0;
+        for (int direction = 1; direction <= 6; direction++) {
+            int target = getDirection(direction, row, col);
+            int targetRow ;
+            int targetCol ;
+            for(int i=1;target!=-1;i++){
+                targetRow = target / 10;
+                targetCol = target % 10;
+                if(Hex.getHex(targetRow, targetCol).getIsminion()!=null){
+                    if(Hex.getHex(targetRow, targetCol).getOwnby()!=player){
+                        target = getDirection(direction, targetRow, targetCol);
+                        continue;
+                    }else{
+                        currentOpponent=i*10+direction;
+                        if(opponent>currentOpponent){
+                            opponent=currentOpponent;
+                        }
+                    }
+                }
+                target = getDirection(direction, targetRow, targetCol);
+            }
+        }
+        return opponent==86? 0:opponent;
+    }
+
+
+    protected int calAlly(Player player) {
+        int ally =86, currentAlly =0;
+        for (int direction = 1; direction <= 6; direction++) {
+            int target = getDirection(direction, row, col);
+            int targetRow ;
+            int targetCol ;
+            for(int i=1;target!=-1;i++){
+                targetRow = target / 10;
+                targetCol = target % 10;
+                if(Hex.getHex(targetRow, targetCol).getIsminion()!=null){
+                    if(Hex.getHex(targetRow, targetCol).getOwnby()==player){
+                        target = getDirection(direction, targetRow, targetCol);
+                        continue;
+                    }else{
+                        currentAlly =i*10+direction;
+                        if(ally > currentAlly){
+                            ally = currentAlly;
+                        }
+                    }
+                }
+                target = getDirection(direction, targetRow, targetCol);
+            }
+        }
+        return ally ==86? 0: ally;
+    }
+
 
 }

@@ -12,12 +12,14 @@ class Eval {
         this.p=player;
         if(strategy==null){return;}
         for (Statement stmt : strategy.statements) {
-            execute(stmt);
+            if(execute(stmt)==0){
+                break;
+            }
         }
     }
 
-    private void execute(Statement stmt) {
-        if (stmt instanceof DoneStatement) {return;}
+    private int execute(Statement stmt) {
+        if (stmt instanceof DoneStatement) {return 0;}
         if (stmt instanceof AssignmentStatement) {
             executeAssignment((AssignmentStatement) stmt);
         } else if (stmt instanceof MoveCommand) {
@@ -33,6 +35,7 @@ class Eval {
         } else {
             throw new RuntimeException("Unknown statement type: " + stmt.getClass().getSimpleName());
         }
+        return 1;
     }
 
     private void executeAssignment(AssignmentStatement stmt) {
@@ -41,8 +44,13 @@ class Eval {
     }
 
     private void executeMove(MoveCommand stmt) {
-        System.out.println("Moving " + stmt.direction);
-        this.m.move(getIntDirec(stmt.direction));
+        int status=this.m.move(getIntDirec(stmt.direction));
+        if(status==0){
+            execute(new DoneStatement());
+            return;
+        }if(status==1){
+            System.out.println("Moving " + stmt.direction);
+        }
     }
 
     private void executeAttack(AttackCommand stmt) {
@@ -113,9 +121,9 @@ class Eval {
 
     private long evaluateGameStatus(gameStatus expr) {
         return switch (expr.name) {
-            case "ally" -> 0;
+            case "ally" -> m.calAlly(p);
             case "nearby" -> calNearby(expr.direction);
-            case "opponent" -> 2;
+            case "opponent" -> m.calOpponent(p);
             case "row" -> m.getRealRow();
             case "col" -> m.getRealCol();
             case "budget" -> p.getBudget();

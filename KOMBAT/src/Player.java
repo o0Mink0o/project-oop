@@ -2,7 +2,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 public class Player {
     Queue<Minion> minion = new LinkedList<Minion>();
-    protected double budget=10;
+    protected double budget=20;
     private int spawnleft;
     public Player() {
     }
@@ -17,6 +17,10 @@ public class Player {
             System.out.println(m.getRealRow()+","+m.getRealCol());
         }
         for (Minion m : minion) {
+            if(m.getHp()<=0) {
+                minion.remove(m);
+                continue;
+            }
             Eval evaluator = new Eval(new Environment());
             evaluator.evaluate(s,m,this);
         }

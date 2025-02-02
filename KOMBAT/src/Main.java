@@ -38,6 +38,24 @@ public class Main {
         Strategy b= ReadStrategy.readfile("C:\\Users\\nathd\\IdeaProjects\\project-oop\\KOMBAT\\src\\Sample_strat.txt");
         player2.executeTurn(b);
 
+        for(int i=1;i<=8;i++){
+            for(int j=1;j<=8;j++){
+                if(i%2==1&&j==1){
+                    System.out.print(" " );
+                }
+                if(Hex.getHex(i,j).getIsminion()!=null){
+                    if(Hex.getHex(i,j).getOwnby()==player1){
+                        System.out.print(1+" ");
+                    }else{
+                        System.out.print(2+" ");
+                    }
+                }else{
+                    System.out.print(0+" ");
+                }
+            }
+            System.out.println();
+        }
+
 
     }
 }
