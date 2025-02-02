@@ -32,30 +32,57 @@ public class Main {
         System.out.println(player2);
         System.out.println(Hex.getHex(1,1).getIsminion());
 
+        printBoard(player1);
+
         Strategy a= ReadStrategy.readfile("C:\\Users\\nathd\\IdeaProjects\\project-oop\\KOMBAT\\src\\testStategy.txt");
         player1.executeTurn(a);
         Strategy b= ReadStrategy.readfile("C:\\Users\\nathd\\IdeaProjects\\project-oop\\KOMBAT\\src\\Sample_strat.txt");
         player2.executeTurn(b);
 
+        printBoard(player1);
 
+    }
+
+    private static void printBoard(Player player1) {
+        for (int i = 0; i < 36; i++) {
+            System.out.print("-");
+        }
+        System.out.println();
         for(int i=1;i<=8;i++){
             for(int j=1;j<=8;j++){
-                if(i%2==1&&j==1){
-                    System.out.print(" " );
+
+                if(j%2==1){
+                    System.out.print("     ");
+                    continue;
                 }
-                if(Hex.getHex(i,j).getIsminion()!=null){
-                    if(Hex.getHex(i,j).getIsminion().ownby==player1){
-                        System.out.print(1+" ");
-                    }else{
-                        System.out.print(2+" ");
-                    }
-                }else{
-                    System.out.print(0+" ");
+                checkMinion(player1, i, j);
+            }
+            System.out.println();
+            for(int j=1;j<=8;j++){
+
+                if(j%2==0){
+                    System.out.print("     ");
+                    continue;
                 }
+                checkMinion(player1, i, j);
             }
             System.out.println();
         }
+        for (int i = 0; i < 36; i++) {
+            System.out.print("-");
+        }
+        System.out.println();
+    }
 
-
+    private static void checkMinion(Player player1, int i, int j) {
+        if(Hex.getHex(i,j).getIsminion()!=null){
+            if(Hex.getHex(i,j).getIsminion().ownby== player1){
+                System.out.print(1+"    ");
+            }else{
+                System.out.print(2+"    ");
+            }
+        }else{
+            System.out.print(0+"    ");
+        }
     }
 }
