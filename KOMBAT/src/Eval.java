@@ -128,8 +128,8 @@ class Eval {
             case "col" -> m.getRealCol();
             case "budget" -> p.getBudget();
             case "int" -> 6;
-            case "maxbudget" -> 7;
-            case "spawnsleft" -> 8;
+            case "maxbudget" -> GameConfig.getInstance().get("max_budget");
+            case "spawnsleft" -> p.getSpawnleft();
             case "random" -> (int)(Math.random() * 1000);
             default -> throw new RuntimeException("Unknown gameStatus: " + expr.name);
         };

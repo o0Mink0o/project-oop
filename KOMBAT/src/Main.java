@@ -20,11 +20,11 @@ public class Main {
         int turn=10;
         for(int i=0;i<turn/2;i++){
             printBoard(player1);
-            Strategy a= ReadStrategy.readfile("C:\\Users\\nathd\\IdeaProjects\\project-oop\\KOMBAT\\src\\testStategy.txt");
+            Strategy a= ReadStrategy.readfile("KOMBAT/src/testStategy.txt");
             System.out.println("Player 1's turn");
             player1.executeTurn(a);
             printBoard(player1);
-            Strategy b= ReadStrategy.readfile("C:\\Users\\nathd\\IdeaProjects\\project-oop\\KOMBAT\\src\\Sample_strat.txt");
+            Strategy b= ReadStrategy.readfile("KOMBAT/src/Sample_strat.txt");
             System.out.println("Player 2's turn");
             player2.executeTurn(b);
             printBoard(player1);

@@ -4,10 +4,17 @@ import java.util.Scanner;
 
 public class Player {
     Queue<Minion> minion = new LinkedList<Minion>();
-    protected double budget=20;
-    private int spawnleft=10;
+    protected double budget;
+    private int spawnleft;
+    private int turn=0;
+    private double intRate;
+
     public Player() {
+        this.budget=(double) GameConfig.getInstance().get("init_budget");
+        this.spawnleft=(int)GameConfig.getInstance().get("max_spawns");
+        this.intRate=(double)GameConfig.getInstance().get("interest_pct");
     }
+
 
 
     protected int getSpawnLeft() {
@@ -15,10 +22,18 @@ public class Player {
     }
 
     protected void executeTurn(Strategy s) {
+        turn++;
+        this.budget += (double)GameConfig.getInstance().get("turn_budget");
+        double curRate=intRate*Math.log10(budget)*Math.log(turn);
+        this.budget+=budget*curRate/100;
+        double maxbudget = (double)GameConfig.getInstance().get("max_budget");
+        if(this.budget>maxbudget) {
+            this.budget=maxbudget;
+        }
         Scanner myObj = new Scanner(System.in);
         String input;
         int pos;
-        System.out.println("Do you want to buy spawn hex? (Y/N)");
+        System.out.println("Do you want to buy spawn hex? (Y/N) (yourbudget = "+this.budget+" )");
         input = myObj.nextLine();
         while(!input.equalsIgnoreCase("N")){
             if(!input.equalsIgnoreCase("Y")){
@@ -41,7 +56,7 @@ public class Player {
             System.out.println("Do you want to buy more spawn hex? (Y/N)");
             input = myObj.nextLine();
         }
-        System.out.println("Do you want to spawn minion? (Y/N)");
+        System.out.println("Do you want to spawn minion? (Y/N) (yourbudget = "+this.budget+" )");
         input = myObj.nextLine();
         while(!input.equalsIgnoreCase("N")){
             if(!input.equalsIgnoreCase("Y")){
@@ -87,7 +102,7 @@ public class Player {
     }
 
     protected void Spawnminion(int x,int y){
-        double spawncost = 5;
+        double spawncost = (double) GameConfig.getInstance().get("spawn_cost");
         if(budget< spawncost){
             System.out.println("Not enough money");
             return;
@@ -113,7 +128,7 @@ public class Player {
     }
 
     protected void buyspawmhex(int x,int y){
-        double hexcost = 5;
+        double hexcost = (double) GameConfig.getInstance().get("hex_purchase_cost");
         if(budget< hexcost){
             System.out.println("Not enough money");
             return;

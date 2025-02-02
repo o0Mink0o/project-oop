@@ -7,6 +7,7 @@ public class Minion {
 
     protected Minion(Player ownby) {
         this.ownby = ownby;
+        this.hp= (int)GameConfig.getInstance().get("init_hp");
     }
 
 
