@@ -17,8 +17,8 @@ public class Main {
                 Hex.board[i][j]=new Hex();
             }
         }
-        int turn=10;
-        for(int i=0;i<turn/2;i++){
+        int maxturn=(int)GameConfig.getInstance().get("max_turns");
+        for(int i=0;i<maxturn/2;i++){
             printBoard(player1);
             Strategy a= ReadStrategy.readfile("KOMBAT/src/testStategy.txt");
             System.out.println("Player 1's turn");
