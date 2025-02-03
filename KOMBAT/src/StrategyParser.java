@@ -23,20 +23,20 @@ class StrategyParser {
             return parseWhileStatement();
         } else if (tokenizer.peek("{")) {
             return parseBlockStatement();
+        } else if (tokenizer.peek("done")) {
+            return ParseDoneCommand();
         } else if (tokenizer.peek("move")) {
             return parseMoveCommand();
         } else if (tokenizer.peek("shoot")) {
             return parseAttackCommand();
         } else if (tokenizer.isIdentifier(tokenizer.peek())) {
             return parseAssignmentStatement();
-        } else if (tokenizer.peek("done")) {
-            return ParseDoneStatement();
         } else {
             throw new SyntaxError("Unexpected token: " + tokenizer.peek());
         }
     }
 
-    private DoneStatement ParseDoneStatement() throws SyntaxError{
+    private DoneStatement ParseDoneCommand() throws SyntaxError{
         tokenizer.consume("done");
         return new DoneStatement();
     }

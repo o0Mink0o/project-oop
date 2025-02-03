@@ -1,1 +1,5 @@
-move downright
+allyLoc = ally
+if(ally%10-5) then {
+move downleft
+}else{
+}

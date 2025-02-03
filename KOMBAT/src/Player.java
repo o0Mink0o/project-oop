@@ -12,7 +12,6 @@ public class Player {
     public Player() {
         this.budget=(double) GameConfig.getInstance().get("init_budget");
         this.spawnleft=(int)GameConfig.getInstance().get("max_spawns");
-        this.intRate=(double)GameConfig.getInstance().get("interest_pct");
     }
 
 
@@ -21,11 +20,15 @@ public class Player {
         return spawnleft;
     }
 
+    protected int getIntRate() {
+        return (int)intRate;
+    }
+
     protected void executeTurn(Strategy s) {
         turn++;
         this.budget += (double)GameConfig.getInstance().get("turn_budget");
-        double curRate=intRate*Math.log10(budget)*Math.log(turn);
-        this.budget+=budget*curRate/100;
+        intRate=(double)GameConfig.getInstance().get("interest_pct")*Math.log10(budget)*Math.log(turn);
+        this.budget+=budget*intRate/100;
         double maxbudget = (double)GameConfig.getInstance().get("max_budget");
         if(this.budget>maxbudget) {
             this.budget=maxbudget;
@@ -33,13 +36,13 @@ public class Player {
         Scanner myObj = new Scanner(System.in);
         String input;
         int pos;
-        System.out.println("Do you want to buy spawn hex? (Y/N) (yourbudget = "+this.budget+" )");
+        System.out.println("Do you want to buy spawn hex? (Y/N) (yourbudget = "+(int)this.budget+" )");
         input = myObj.nextLine();
 
         while(!input.equalsIgnoreCase("N")){
             if(!input.equalsIgnoreCase("Y")){
                 System.out.println("Invalid input please try again");
-                System.out.println("Do you want to spawn minion? (Y/N)");
+                System.out.println("Do you want to buy spawn hex? (Y/N) (yourbudget = "+(int)this.budget+" )");
                 input = myObj.nextLine();
                 continue;
             }
@@ -69,12 +72,12 @@ public class Player {
         }
 
 
-        System.out.println("Do you want to spawn minion? (Y/N) (yourbudget = "+this.budget+" )");
+        System.out.println("Do you want to spawn minion? (Y/N) (yourbudget = "+(int)this.budget+" )");
         input = myObj.nextLine();
         while(!input.equalsIgnoreCase("N")) {
             if (!input.equalsIgnoreCase("Y")) {
                 System.out.println("Invalid input please try again");
-                System.out.println("Do you want to spawn minion? (Y/N)");
+                System.out.println("Do you want to spawn minion? (Y/N) (yourbudget = "+(int)this.budget+" )");
                 input = myObj.nextLine();
                 continue;
             }
@@ -98,7 +101,6 @@ public class Player {
                 System.out.println("Do you want to spawn more minion? (Y/N)");
                 input = myObj.nextLine();
             }
-
 
 
         for (Minion m : minion) {

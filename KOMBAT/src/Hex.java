@@ -47,12 +47,12 @@ public class Hex {
                 return true;
             }
         }
-        if(x<8){
+        if(x<7){
             if(Hex.board[x+1][y].ownby==player){
                 return true;
             }
         }
-        if(y<8){
+        if(y<7){
             if(Hex.board[x][y+1].ownby==player){
                 return true;
             }

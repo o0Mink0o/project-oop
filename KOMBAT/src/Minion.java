@@ -63,6 +63,10 @@ public class Minion {
     }
 
     protected void shoot(int direction,double cost) {
+        if(this.ownby.getBudget()<=0){
+            System.out.println("not enough budget to shoot");
+            return ;
+        }
         int target = getDirection(direction, row, col);
         this.ownby.budget-=cost;
 
@@ -147,7 +151,7 @@ public class Minion {
 
 
     protected int calOpponent(Player player) {
-        int opponent=86,currentOpponent=0;
+        int opponent=86,currentOpponent;
         for (int direction = 1; direction <= 6; direction++) {
             int target = getDirection(direction, row, col);
             int targetRow ;
@@ -156,7 +160,7 @@ public class Minion {
                 targetRow = target / 10;
                 targetCol = target % 10;
                 if(Hex.getHex(targetRow, targetCol).getIsminion()!=null){
-                    if(Hex.getHex(targetRow, targetCol).getOwnby()!=player){
+                    if(Hex.getHex(targetRow, targetCol).getOwnby()==player){
                         target = getDirection(direction, targetRow, targetCol);
                         continue;
                     }else{
@@ -174,7 +178,7 @@ public class Minion {
 
 
     protected int calAlly(Player player) {
-        int ally =86, currentAlly =0;
+        int ally =86, currentAlly;
         for (int direction = 1; direction <= 6; direction++) {
             int target = getDirection(direction, row, col);
             int targetRow ;
@@ -183,7 +187,7 @@ public class Minion {
                 targetRow = target / 10;
                 targetCol = target % 10;
                 if(Hex.getHex(targetRow, targetCol).getIsminion()!=null){
-                    if(Hex.getHex(targetRow, targetCol).getOwnby()==player){
+                    if(Hex.getHex(targetRow, targetCol).getOwnby()!=player){
                         target = getDirection(direction, targetRow, targetCol);
                         continue;
                     }else{

@@ -19,23 +19,34 @@ class Eval {
     }
 
     private int execute(Statement stmt) {
-        if (stmt instanceof DoneStatement) {return 0;}
         if (stmt instanceof AssignmentStatement) {
             executeAssignment((AssignmentStatement) stmt);
+        } else if (stmt instanceof DoneStatement) {
+            return 0;  // หยุด eval ทันทีเมื่อพบ DoneStatement
         } else if (stmt instanceof MoveCommand) {
-            executeMove((MoveCommand) stmt);
+            if (executeMove((MoveCommand) stmt) == 0) { // หยุดถ้าการ move สำเร็จ
+                return 0;
+            }
         } else if (stmt instanceof AttackCommand) {
-            executeAttack((AttackCommand) stmt);
+            if (executeAttack((AttackCommand) stmt) == 0) { // หยุดถ้าการโจมตีสำเร็จ
+                return 0;
+            }
         } else if (stmt instanceof IfStatement) {
-            executeIf((IfStatement) stmt);
+            if (executeIf((IfStatement) stmt) == 0) { // หยุดถ้ามี move, attack หรือ done ภายใน If
+                return 0;
+            }
         } else if (stmt instanceof WhileStatement) {
-            executeWhile((WhileStatement) stmt);
+            if (executeWhile((WhileStatement) stmt) == 0) { // หยุดถ้ามี move, attack หรือ done ภายใน While
+                return 0;
+            }
         } else if (stmt instanceof BlockStatement) {
-            executeBlock((BlockStatement) stmt);
+            if (executeBlock((BlockStatement) stmt) == 0) { // หยุดถ้ามี move, attack หรือ done ภายใน Block
+                return 0;
+            }
         } else {
             throw new RuntimeException("Unknown statement type: " + stmt.getClass().getSimpleName());
         }
-        return 1;
+        return 1; // ดำเนินการต่อถ้ายังไม่มีคำสั่งที่ต้องหยุด
     }
 
     private void executeAssignment(AssignmentStatement stmt) {
@@ -43,20 +54,23 @@ class Eval {
         env.assign(stmt.identifier, value);
     }
 
-    private void executeMove(MoveCommand stmt) {
-        int status=this.m.move(getIntDirec(stmt.direction));
-        if(status==0){
-            execute(new DoneStatement());
-            return;
-        }if(status==1){
-            System.out.println("Moving " + stmt.direction);
+    private int executeMove(MoveCommand stmt) {
+        int status = this.m.move(getIntDirec(stmt.direction));
+        if (status == 0) {
+            return 0; // ถ้าขยับไม่ได้ ให้หยุด execution
         }
+        if (status == 1) {
+            System.out.println("Moving " + stmt.direction);
+            return 0; // ถ้าขยับสำเร็จ ให้หยุด eval ทันที
+        }
+        return 1;
     }
 
-    private void executeAttack(AttackCommand stmt) {
+    private int executeAttack(AttackCommand stmt) {
         long power = evaluateExpression(stmt.power);
         System.out.println("Shooting " + stmt.direction + " with power " + power);
-        this.m.shoot(getIntDirec(stmt.direction),power);
+        this.m.shoot(getIntDirec(stmt.direction), power);
+        return 0; // หยุด eval หลังจากยิง
     }
 
     private int getIntDirec(String direction) {
@@ -83,24 +97,30 @@ class Eval {
         }
     }
 
-    private void executeIf(IfStatement stmt) {
-        if (evaluateExpression(stmt.condition) != 0) {
-            execute(stmt.thenBranch);
+    private int executeIf(IfStatement stmt) {
+        if (evaluateExpression(stmt.condition) > 0) {
+            return execute(stmt.thenBranch); // ถ้าภายในมี move/attack/done ให้หยุด
         } else {
-            execute(stmt.elseBranch);
+            return execute(stmt.elseBranch);
         }
     }
 
-    private void executeWhile(WhileStatement stmt) {
-        for (int i=0;evaluateExpression(stmt.condition) != 0&&i<10000;i++) {
-            execute(stmt.body);
+    private int executeWhile(WhileStatement stmt) {
+        for (int i = 0; evaluateExpression(stmt.condition) != 0 && i < 10000; i++) {
+            if (execute(stmt.body) == 0) { // หยุดทันทีถ้าภายในมี move/attack/done
+                return 0;
+            }
         }
+        return 1;
     }
 
-    private void executeBlock(BlockStatement stmt) {
+    private int executeBlock(BlockStatement stmt) {
         for (Statement s : stmt.statements) {
-            execute(s);
+            if (execute(s) == 0) { // ถ้าเจอคำสั่งที่ต้องหยุด ให้หยุดทันที
+                return 0;
+            }
         }
+        return 1;
     }
 
     private long evaluateExpression(Expression expr) {
@@ -127,7 +147,7 @@ class Eval {
             case "row" -> m.getRealRow();
             case "col" -> m.getRealCol();
             case "budget" -> p.getBudget();
-            case "int" -> 6;
+            case "int" -> p.getIntRate();
             case "maxbudget" -> GameConfig.getInstance().get("max_budget");
             case "spawnsleft" -> p.getSpawnleft();
             case "random" -> (int)(Math.random() * 1000);
