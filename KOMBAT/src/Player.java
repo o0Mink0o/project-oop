@@ -35,54 +35,89 @@ public class Player {
         int pos;
         System.out.println("Do you want to buy spawn hex? (Y/N) (yourbudget = "+this.budget+" )");
         input = myObj.nextLine();
-        while(!input.equalsIgnoreCase("N")){
-            if(!input.equalsIgnoreCase("Y")){
+
+        while(!input.equalsIgnoreCase("N")) {
+            if (!input.equalsIgnoreCase("Y")) {
                 System.out.println("Invalid input please try again");
                 System.out.println("Do you want to spawn minion? (Y/N)");
                 input = myObj.nextLine();
                 continue;
             }
-            System.out.println("Enter row,col where u want to buy (11->(1,1))");
-            pos = myObj.nextInt();
-            myObj.nextLine();
-            int x,y;
-            x=pos/10;
-            y=pos%10;
-            if(x<1||x>8||y<1||y>8){
-                System.out.println("Invalid row or col");
-                continue;
+            System.out.println("Enter row,col where you want to buy (11->(1,1))");
+            int x, y;
+            while (true) {
+                try {
+                    pos = Integer.parseInt(myObj.nextLine().trim()); // Using parseInt to handle exceptions
+                    x = pos / 10;
+                    y = pos % 10;
+
+                    if (x < 1 || x > 8 || y < 1 || y > 8) {
+                        System.out.println("Invalid row or col. Try again.");
+                    } else {
+                        break; // Valid input, exit the loop
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input, please enter numbers only. Try again.");
+                }
             }
+
             buyspawmhex(x, y);
             System.out.println("Do you want to buy more spawn hex? (Y/N)");
             input = myObj.nextLine();
+
         }
+
+
+
+//            System.out.println("Enter row,col where u want to buy (11->(1,1))");
+//            pos = myObj.nextInt();
+//            myObj.nextLine();
+//
+//            int x,y;
+//            x=pos/10;
+//            y=pos%10;
+//            if(x<1||x>8||y<1||y>8) {
+//                System.out.println("Invalid row or col");
+//                continue;
+//            }
+//            buyspawmhex(x, y);
+//            System.out.println("Do you want to buy more spawn hex? (Y/N)");
+//            input = myObj.nextLine();
+//        }
+
+
         System.out.println("Do you want to spawn minion? (Y/N) (yourbudget = "+this.budget+" )");
         input = myObj.nextLine();
-        while(!input.equalsIgnoreCase("N")){
-            if(!input.equalsIgnoreCase("Y")){
+        while(!input.equalsIgnoreCase("N")) {
+            if (!input.equalsIgnoreCase("Y")) {
                 System.out.println("Invalid input please try again");
                 System.out.println("Do you want to spawn minion? (Y/N)");
                 input = myObj.nextLine();
                 continue;
             }
-            if(spawnleft==0){
+            if (spawnleft == 0) {
                 System.out.println("You have 0 spawnleft");
                 break;
             }
             System.out.println("Enter row,col where u want to spawn (11->(1,1))");
             pos = myObj.nextInt();
             myObj.nextLine();
-            int x,y;
-            x=pos/10;
-            y=pos%10;
-            if(x<1||x>8||y<1||y>8){
-                System.out.println("Invalid row or col");
-                continue;
+
+                int x, y;
+                x = pos / 10;
+                y = pos % 10;
+                if (x < 1 || x > 8 || y < 1 || y > 8) {
+                    System.out.println("Invalid row or col");
+                    continue;
+                }
+
+                Spawnminion(x, y);
+                System.out.println("Do you want to spawn more minion? (Y/N)");
+                input = myObj.nextLine();
             }
-            Spawnminion(x, y);
-            System.out.println("Do you want to spawn more minion? (Y/N)");
-            input = myObj.nextLine();
-        }
+
+
+
         for (Minion m : minion) {
             if(m.getHp()<=0) {
                 minion.remove(m);
@@ -144,9 +179,6 @@ public class Player {
         }else{
             System.out.println("new spawnable board must adjacent to the your spawnable hexes");
         }
-
-
-
 
     }
 
