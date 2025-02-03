@@ -36,13 +36,14 @@ public class Player {
         System.out.println("Do you want to buy spawn hex? (Y/N) (yourbudget = "+this.budget+" )");
         input = myObj.nextLine();
 
-        while(!input.equalsIgnoreCase("N")) {
-            if (!input.equalsIgnoreCase("Y")) {
+        while(!input.equalsIgnoreCase("N")){
+            if(!input.equalsIgnoreCase("Y")){
                 System.out.println("Invalid input please try again");
                 System.out.println("Do you want to spawn minion? (Y/N)");
                 input = myObj.nextLine();
                 continue;
             }
+
             System.out.println("Enter row,col where you want to buy (11->(1,1))");
             int x, y;
             while (true) {
@@ -66,24 +67,6 @@ public class Player {
             input = myObj.nextLine();
 
         }
-
-
-
-//            System.out.println("Enter row,col where u want to buy (11->(1,1))");
-//            pos = myObj.nextInt();
-//            myObj.nextLine();
-//
-//            int x,y;
-//            x=pos/10;
-//            y=pos%10;
-//            if(x<1||x>8||y<1||y>8) {
-//                System.out.println("Invalid row or col");
-//                continue;
-//            }
-//            buyspawmhex(x, y);
-//            System.out.println("Do you want to buy more spawn hex? (Y/N)");
-//            input = myObj.nextLine();
-//        }
 
 
         System.out.println("Do you want to spawn minion? (Y/N) (yourbudget = "+this.budget+" )");
@@ -179,6 +162,9 @@ public class Player {
         }else{
             System.out.println("new spawnable board must adjacent to the your spawnable hexes");
         }
+
+
+
 
     }
 
