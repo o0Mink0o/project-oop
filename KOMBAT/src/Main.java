@@ -1,9 +1,29 @@
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Player player1=new Player();
-        Bot bot1=new Bot();
+        System.out.println("Which mode do you want to play (PvsP,PvsB,BvsB)");
+        Scanner myObj = new Scanner(System.in);
+        String input;
+        input = myObj.nextLine();
+        while (!(input.equals("PvsP")||input.equals("PvsB")||input.equals("BvsB"))) {
+            System.out.println("Invalid input");
+            System.out.println("Which mode do you want to play (PvsP,PvsB,BvsB)");
+            input = myObj.nextLine();
+        }
+        Player player1;
+        Player player2;
+        if (input.equals("PvsP")) {
+             player1=new Player();
+             player2=new Player();
+        }else if (input.equals("PvsB")) {
+            player1=new Player();
+            player2=new Bot();
+        }else  {
+            player1=new Bot();
+            player2=new Bot();
+        }
         for(int i=0;i<8;i++){
             for(int j=0;j<8;j++){
                 if ((i <= 1 && j <= 1) || (i == 0 && j == 2)) {
@@ -11,7 +31,7 @@ public class Main {
                     continue;
                 }
                 if((i >= 6 && j >= 6) || (i == 7 && j == 5)){
-                    Hex.board[i][j] = new Hex(bot1);
+                    Hex.board[i][j] = new Hex(player2);
                     continue;
                 }
                 Hex.board[i][j]=new Hex();
@@ -26,7 +46,7 @@ public class Main {
             printBoard(player1);
             Strategy b= ReadStrategy.readfile("KOMBAT/src/testStategy.txt");
             System.out.println("Bot 1's turn");
-            bot1.executeTurn(b);
+            player2.executeTurn(b);
             printBoard(player1);
         }
     }
