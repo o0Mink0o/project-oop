@@ -3,7 +3,7 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         Player player1=new Player();
-        Player player2=new Player();
+        Bot bot1=new Bot();
         for(int i=0;i<8;i++){
             for(int j=0;j<8;j++){
                 if ((i <= 1 && j <= 1) || (i == 0 && j == 2)) {
@@ -11,7 +11,7 @@ public class Main {
                     continue;
                 }
                 if((i >= 6 && j >= 6) || (i == 7 && j == 5)){
-                    Hex.board[i][j] = new Hex(player2);
+                    Hex.board[i][j] = new Hex(bot1);
                     continue;
                 }
                 Hex.board[i][j]=new Hex();
@@ -24,9 +24,9 @@ public class Main {
             System.out.println("Player 1's turn");
             player1.executeTurn(a);
             printBoard(player1);
-            Strategy b= ReadStrategy.readfile("KOMBAT/src/Sample_strat.txt");
-            System.out.println("Player 2's turn");
-            player2.executeTurn(b);
+            Strategy b= ReadStrategy.readfile("KOMBAT/src/testStategy.txt");
+            System.out.println("Bot 1's turn");
+            bot1.executeTurn(b);
             printBoard(player1);
         }
     }

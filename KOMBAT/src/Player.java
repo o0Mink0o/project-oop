@@ -5,9 +5,9 @@ import java.util.Scanner;
 public class Player {
     Queue<Minion> minion = new LinkedList<Minion>();
     protected double budget;
-    private int spawnleft;
-    private int turn=0;
-    private double intRate;
+    protected int spawnleft;
+    protected int turn=0;
+    protected double intRate;
 
     public Player() {
         this.budget=(double) GameConfig.getInstance().get("init_budget");
@@ -100,7 +100,7 @@ public class Player {
                 Spawnminion(x, y);
                 System.out.println("Do you want to spawn more minion? (Y/N)");
                 input = myObj.nextLine();
-            }
+        }
 
 
         for (Minion m : minion) {
@@ -121,19 +121,19 @@ public class Player {
         return (int) this.budget;
     }
 
-    protected void Spawnminion(int x,int y){
+    protected int Spawnminion(int x,int y){
         double spawncost = (double) GameConfig.getInstance().get("spawn_cost");
         if(budget< spawncost){
             System.out.println("Not enough money");
-            return;
+            return 0;
         }
         if(Hex.getHex(x,y).getIsminion()!=null){
             System.out.println("There is minion on this board already");
-            return;
+            return 0;
         }
         if(Hex.getHex(x,y).getOwnby()!=this){
             System.out.println("This is not your spawn hex");
-            return;
+            return 0;
         }
         budget-= spawncost;
         Minion minion1 = new Minion(this);
@@ -143,7 +143,7 @@ public class Player {
         minion1.setRow(x);
         System.out.println("Spawned minion at board "+x+","+y);
         spawnleft--;
-
+        return 1;
 
     }
 
