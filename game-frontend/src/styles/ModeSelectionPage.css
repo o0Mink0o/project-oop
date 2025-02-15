@@ -7,7 +7,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
 }
+
+
+/* ชื่อหัวข้อใหญ่ "Game Mode" */
+.game-mode-title {
+    font-size: 48px;
+    font-weight: bold;
+    color: #CCD3CA;  /* เปลี่ยนเป็นสีขาวสดใส */
+    text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.8); /* เพิ่มเงามืดชัดเจน */
+    margin-bottom: 50px; /* ระยะห่างจากปุ่ม */
+}
+
 
 /* กล่องคอนเทนต์ */
 .content {
@@ -21,7 +33,7 @@
 /* กล่องรวมปุ่มแนวนอน */
 .mode-options {
     display: flex;
-    flex-direction: row; /* เรียงปุ่มแนวนอน */
+    flex-direction: row;
     justify-content: center;
     gap: 40px;
 }
@@ -36,9 +48,9 @@
 
 /* รูปภาพ */
 .mode-image {
-    width: 200px; /* ขยายภาพใหญ่ขึ้น */
+    width: 200px;
     height: auto;
-    margin-bottom: 10px; /* ระยะห่างระหว่างรูปกับปุ่ม */
+    margin-bottom: 10px;
 }
 
 /* ปุ่ม */

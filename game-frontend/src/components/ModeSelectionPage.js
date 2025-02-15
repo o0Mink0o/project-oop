@@ -11,6 +11,11 @@ const ModeSelectionPage = () => {
 
     return (
         <div className="mode-selection-page">
+            {/* หัวข้อใหญ่ "Game Mode" */}
+            <div className="game-mode-title">
+                Game Mode
+            </div>
+
             <div className="content">
                 <div className="mode-options">
                     <div className="mode-option" onClick={() => navigate('/player-config/1')}>
