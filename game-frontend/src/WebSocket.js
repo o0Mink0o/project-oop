@@ -1,17 +1,15 @@
-import { w3cwebsocket as W3CWebSocket } from 'websocket';
-
-const client = new W3CWebSocket('ws://localhost:8080');
+const client = new WebSocket('ws://localhost:8080');
 
 client.onopen = () => {
-    console.log('WebSocket Client Connected');
+    console.log('✅ WebSocket Connected');
 };
 
-client.onmessage = (message) => {
-    console.log(message);
+client.onerror = (error) => {
+    console.error('❌ WebSocket Error:', error);
 };
 
 client.onclose = () => {
-    console.log('WebSocket Client Disconnected');
+    console.warn('⚠️ WebSocket Disconnected');
 };
 
 export default client;
