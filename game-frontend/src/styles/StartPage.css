@@ -1,0 +1,71 @@
+/* ตั้งค่าพื้นหลังให้เต็มจอ */
+.start-page {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background: url('../assets/image/backG.png') no-repeat center center/cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ทำให้พื้นหลังมืดลงเพื่อให้ตัวหนังสืออ่านง่าย */
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+/* กล่องคอนเทนต์ตรงกลาง */
+.content {
+    position: relative;
+    text-align: center;
+}
+
+/* สไตล์ของ Title */
+.title {
+    font-size: 48px;
+    font-weight: bold;
+    color: white;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 15px 30px;
+    border-radius: 10px;
+}
+
+/* ปุ่มต่างๆ */
+.button-group {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.btn {
+    width: 250px;
+    padding: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-start {
+    background-color: #007bff;
+}
+
+.btn-start:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.btn-home {
+    background-color: #6c757d;
+}
+
+.btn-home:hover {
+    background-color: #495057;
+    transform: scale(1.05);
+}

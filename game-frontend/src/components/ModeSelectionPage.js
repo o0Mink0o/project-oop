@@ -1,26 +1,38 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../styles/ModeSelectionPage.css';
+import BackButton from './BackButton';
+import botVsBotImg from '../assets/image/bvb.png';
+import botVsPlayerImg from '../assets/image/bvp.png';
+import playerVsPlayerImg from '../assets/image/pvp.png';
 
-const ModeSelectionPage = ({ onSelectMode }) => {
+const ModeSelectionPage = () => {
+    const navigate = useNavigate();
+
     return (
-        <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
-            <button
-                className="px-4 py-2 m-2 font-bold text-white bg-green-500 rounded-full hover:bg-green-700"
-                onClick={() => onSelectMode('bot-vs-bot')}
-            >
-                Bot vs Bot
-            </button>
-            <button
-                className="px-4 py-2 m-2 font-bold text-white bg-yellow-500 rounded-full hover:bg-yellow-700"
-                onClick={() => onSelectMode('bot-vs-player')}
-            >
-                Bot vs Player
-            </button>
-            <button
-                className="px-4 py-2 m-2 font-bold text-white bg-red-500 rounded-full hover:bg-red-700"
-                onClick={() => onSelectMode('player-vs-player')}
-            >
-                Player vs Player
-            </button>
+        <div className="mode-selection-page">
+            <div className="content">
+                <div className="mode-options">
+                    <div className="mode-option" onClick={() => navigate('/player-config/1')}>
+                        <img src={botVsBotImg} alt="Bot vs Bot" className="mode-image" />
+                        <button className="btn btn-bot-vs-bot">Bot vs Bot</button>
+                    </div>
+                    <div className="mode-option" onClick={() => navigate('/player-config/2')}>
+                        <img src={botVsPlayerImg} alt="Bot vs Player" className="mode-image" />
+                        <button className="btn btn-bot-vs-player">Bot vs Player</button>
+                    </div>
+                    <div className="mode-option" onClick={() => navigate('/player-config/3')}>
+                        <img src={playerVsPlayerImg} alt="Player vs Player" className="mode-image" />
+                        <button className="btn btn-player-vs-player">Player vs Player</button>
+                    </div>
+                </div>
+                <div className="buttons">
+                    <button className="btn btn-home" onClick={() => navigate('/')}>
+                        Home
+                    </button>
+                    <BackButton />
+                </div>
+            </div>
         </div>
     );
 };

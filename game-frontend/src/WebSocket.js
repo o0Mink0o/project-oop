@@ -12,4 +12,6 @@ client.onclose = () => {
     console.warn('⚠️ WebSocket Disconnected');
 };
 
-export default client;
+client.onmessage = (message) => {
+    console.log('📩 Message:', message.data);
+};
