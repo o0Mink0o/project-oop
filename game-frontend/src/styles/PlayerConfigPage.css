@@ -1,0 +1,71 @@
+/* ตั้งค่าพื้นหลังให้เต็มจอ */
+.player-config-page {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background: url('../assets/image/backG.png') no-repeat center center/cover; /* พื้นหลังใหม่ */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* สไตล์หัวข้อ */
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* กล่องป้อนข้อมูล */
+.minion-inputs {
+    margin-bottom: 20px;
+}
+
+.input-field {
+    width: 250px;
+    padding: 10px;
+    font-size: 16px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.input-field:focus {
+    border-color: #4a90e2;
+}
+
+/* ปุ่มต่างๆ */
+.btn {
+    width: 250px;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin: 10px 0;
+}
+
+.btn-add {
+    background-color: #38a169;
+}
+
+.btn-add:hover {
+    background-color: #2f855a;
+    transform: scale(1.05);
+}
+
+.btn-submit {
+    background-color: #4caf50;
+}
+
+.btn-submit:hover {
+    background-color: #388e3c;
+    transform: scale(1.05);
+}

@@ -1,0 +1,18 @@
+/* ปุ่มกลับ */
+.back-button {
+    padding: 12px 24px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: #718096;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin: 10px;
+}
+
+.back-button:hover {
+    background-color: #4a5568;
+    transform: scale(1.05);
+}

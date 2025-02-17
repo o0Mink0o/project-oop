@@ -1,0 +1,111 @@
+/* ตั้งค่าพื้นหลังให้เต็มจอ */
+.mode-selection-page {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background: url('../assets/image/backG.png') no-repeat center center/cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+
+/* ชื่อหัวข้อใหญ่ "Game Mode" */
+.game-mode-title {
+    font-size: 48px;
+    font-weight: bold;
+    color: #CCD3CA;  /* เปลี่ยนเป็นสีขาวสดใส */
+    text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.8); /* เพิ่มเงามืดชัดเจน */
+    margin-bottom: 50px; /* ระยะห่างจากปุ่ม */
+}
+
+
+/* กล่องคอนเทนต์ */
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+}
+
+/* กล่องรวมปุ่มแนวนอน */
+.mode-options {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 40px;
+}
+
+/* ปุ่มแต่ละอัน */
+.mode-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+
+/* รูปภาพ */
+.mode-image {
+    width: 200px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+/* ปุ่ม */
+.btn {
+    width: 300px;
+    height: 80px;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+/* ทำให้ปุ่มขยายตอน hover */
+.mode-option:hover .btn {
+    transform: scale(1.1); /* ปรับให้ขยายเฉพาะปุ่ม */
+}
+
+/* ปุ่มแต่ละสี */
+.btn-bot-vs-bot {
+    background-color: #38a169;
+}
+
+.btn-bot-vs-bot:hover {
+    background-color: #2f855a;
+}
+
+.btn-bot-vs-player {
+    background-color: #ecc94b;
+}
+
+.btn-bot-vs-player:hover {
+    background-color: #d69e2e;
+}
+
+.btn-player-vs-player {
+    background-color: #f56565;
+}
+
+.btn-player-vs-player:hover {
+    background-color: #e53e3e;
+}
+
+/* ปุ่ม Home & Back */
+.buttons {
+    display: flex;
+    gap: 20px;
+}
+
+.btn-home {
+    background-color: #718096;
+}
+
+.btn-home:hover {
+    background-color: #4a5568;
+}
