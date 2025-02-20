@@ -1,0 +1,137 @@
+/* Game board container */
+.hex-grid {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* Hex cell base styles */
+.hex-cell {
+    position: absolute;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    backface-visibility: hidden;
+}
+
+.hex-cell:hover {
+    transform: scale(1.05);
+    z-index: 10;
+}
+
+/* Hover effects */
+.hex-cell:hover::before {
+    opacity: 0.2;
+}
+
+/* Selection styles */
+.hex-cell.selected {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+}
+
+/* Player panels */
+.player-panel {
+    transition: all 0.3s ease;
+}
+
+.player-panel:hover {
+    transform: translateY(-2px);
+}
+
+/* Button styles */
+.action-button {
+    transition: all 0.2s ease;
+}
+
+.action-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.action-button:active {
+    transform: translateY(0);
+}
+
+/* Minion icon styles */
+.minion-icon {
+    transition: all 0.3s ease;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Purchase overlay styles */
+.purchase-overlay {
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Coordinate label styles */
+.coordinate-label {
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+}
+
+.hex-cell:hover .coordinate-label {
+    opacity: 1;
+}
+
+/* Available hex highlight */
+.hex-cell.available {
+    position: relative;
+}
+
+.hex-cell.available::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: currentColor;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+/* Turn indicator animation */
+.turn-indicator {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Owner border glow effect */
+.hex-cell.owned {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .hex-cell {
+        transform-origin: center;
+        transform: scale(0.9);
+    }
+}
