@@ -76,7 +76,7 @@ class StrategyParser {
         tokenizer.consume("(");
         Expression condition = parseExpression();
         tokenizer.consume(")");
-        tokenizer.consume("then");
+        if(tokenizer.peek("then")) {tokenizer.consume("then");}
         Statement thenBranch = parseStatement();
         tokenizer.consume("else");
         Statement elseBranch = parseStatement();
