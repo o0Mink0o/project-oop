@@ -10,7 +10,7 @@ const StartPage = () => {
             <div className="overlay"></div>
 
             {/* คอนเทนต์ตรงกลาง */}
-            <div className="content">
+            <div className="content ">
                 <h1 className="title">Welcome to the KOMBAT</h1>
 
                 {/* ปุ่มต่างๆ */}

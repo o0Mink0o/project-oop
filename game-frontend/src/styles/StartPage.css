@@ -24,11 +24,11 @@
 
 /* สไตล์ของ Title */
 .title {
-    font-size: 48px;
+    font-size: 100px;
     font-weight: bold;
-    color: white;
-    background: rgba(0, 0, 0, 0.6);
-    padding: 15px 30px;
+    color: #C6EBC5;
+    background-color: #DF826C;
+    padding: 50px 40px;
     border-radius: 10px;
 }
 
@@ -66,6 +66,6 @@
 }
 
 .btn-home:hover {
-    background-color: #495057;
-    transform: scale(1.05);
+        background-color: #495057;
+        transform: scale(1.05);
 }

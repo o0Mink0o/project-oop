@@ -40,7 +40,7 @@ public class Main {
         int maxturn=(int)GameConfig.getInstance().get("max_turns");
         for(int i=0;i<maxturn/2;i++){
             printBoard(player1);
-            Strategy a= ReadStrategy.readfile("KOMBAT/src/testStategy.txt");
+            Strategy a= ReadStrategy.readfile("KOMBAT/src/Sample_strat.txt");
             System.out.println("Player 1's turn");
             player1.executeTurn(a);
             printBoard(player1);
