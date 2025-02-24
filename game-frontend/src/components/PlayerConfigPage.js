@@ -12,10 +12,10 @@ const PlayerConfigPage = ({ playerNumber, onSubmit }) => {
     };
 
     const handleAddMinion = () => {
-        if (minions.length < 3) {
+        if (minions.length < 5) {
             setMinions([...minions, { name: '', defense: '', strategy: '' }]);
         } else {
-            alert('You can only add up to 3 minions.');
+            alert('You can only add up to 5 minions.');
         }
     };
 

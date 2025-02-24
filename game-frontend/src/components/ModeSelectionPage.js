@@ -20,15 +20,15 @@ const ModeSelectionPage = () => {
                 <div className="mode-options">
                     <div className="mode-option" onClick={() => navigate('/player-config/1')}>
                         <img src={botVsBotImg} alt="Bot vs Bot" className="mode-image" />
-                        <button className="btn btn-bot-vs-bot">Bot vs Bot</button>
+                        <button className="btn btn-bot-vs-bot">Auto</button>
                     </div>
                     <div className="mode-option" onClick={() => navigate('/player-config/2')}>
                         <img src={botVsPlayerImg} alt="Bot vs Player" className="mode-image" />
-                        <button className="btn btn-bot-vs-player">Bot vs Player</button>
+                        <button className="btn btn-bot-vs-player">1 Player</button>
                     </div>
                     <div className="mode-option" onClick={() => navigate('/player-config/3')}>
                         <img src={playerVsPlayerImg} alt="Player vs Player" className="mode-image" />
-                        <button className="btn btn-player-vs-player">Player vs Player</button>
+                        <button className="btn btn-player-vs-player">PvP</button>
                     </div>
                 </div>
                 <div className="buttons">
