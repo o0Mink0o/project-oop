@@ -12,7 +12,7 @@ const MINION_TYPES = [
     { name: "Elite Minion", price: 40 }
 ];
 
-// Corrected starting positions - Fixed player 2 position inconsistency
+// Initial player configurations
 const initialPlayers = [
     {
         id: 1,
@@ -27,7 +27,7 @@ const initialPlayers = [
         id: 2,
         money: 100,
         minions: [],
-        ownedHexes: [{x: 8, y: 8},{x: 8, y: 7},{x: 7, y: 8}], // Consistent with comment in code
+        ownedHexes: [{x: 8, y: 8},{x: 8, y: 7},{x: 7, y: 8}],
         color: 'rgb(254, 202, 202)',
         hasUsedHexAction: false,
         hasUsedMinionAction: false
@@ -42,53 +42,41 @@ const GameBoard = () => {
     const [selectedMinionType, setSelectedMinionType] = useState(null);
     const [turn, setTurn] = useState(1);
     const [showAvailableHexes, setShowAvailableHexes] = useState(false);
-    const [debugMode, setDebugMode] = useState(false);
+    const [debugMode] = useState(false);
 
-    // Separate adjacency checks for different cases
-    // Orthogonal adjacency (side-by-side)
+    // Adjacency checks remain the same
     const isOrthogonalAdjacent = (hex1, hex2) => {
         const dx = Math.abs(hex1.x - hex2.x);
         const dy = Math.abs(hex1.y - hex2.y);
 
-        // For hexagonal grid (using axial coordinates), adjacency is different
-        // A hex is adjacent if coordinates differ by at most 1 in only one direction
-        // This depends on whether we're using even-q or odd-q offset
         if (hex1.x % 2 === 0) { // even column
             return (dx === 1 && dy === 0) ||
                 (dx === 0 && dy === 1) ||
-                (dx === 0 && dy === 1) ||
-                (dx === 1 && dy === 1 && hex1.y > hex2.y); // diagonal only for specific direction
+                (dx === 1 && dy === 1 && hex1.y > hex2.y);
         } else { // odd column
             return (dx === 1 && dy === 0) ||
                 (dx === 0 && dy === 1) ||
-                (dx === 1 && dy === 1 && hex1.y < hex2.y); // diagonal only for specific direction
+                (dx === 1 && dy === 1 && hex1.y < hex2.y);
         }
     };
 
-    // We now use only orthogonal adjacency and remove the diagonal adjacency concept
     const isAdjacent = (hex1, hex2) => {
         return isOrthogonalAdjacent(hex1, hex2);
     };
 
-    // Debug function to show adjacency type
     const getAdjacencyType = (hex1, hex2) => {
         if (isOrthogonalAdjacent(hex1, hex2)) return "adjacent";
         return "not adjacent";
     };
 
-    // Check if hex is available for purchase
     const isHexAvailableForPurchase = (x, y) => {
         const hex = { x, y };
-        // If hex is already owned by any player, it's not available
         if (players.some(p => p.ownedHexes.some(h => h.x === x && h.y === y))) {
             return false;
         }
-
-        // Check adjacency to player's hexes
         return players[currentPlayer].ownedHexes.some(playerHex => isAdjacent(playerHex, hex));
     };
 
-    // Get adjacency details for debugging
     const getAdjacencyDetails = (x, y) => {
         const hex = { x, y };
         const adjacentPlayerHexes = players[currentPlayer].ownedHexes.filter(playerHex =>
@@ -104,7 +92,6 @@ const GameBoard = () => {
     const handleHexClick = (x, y) => {
         if (purchaseMode === 'hex' && !players[currentPlayer].hasUsedHexAction) {
             if (isHexAvailableForPurchase(x, y)) {
-                // Only allow selection of a single hex
                 setSelectedHex({ x, y });
 
                 if (debugMode) {
@@ -180,29 +167,29 @@ const GameBoard = () => {
     };
 
     const PlayerPanel = ({ player, isCurrentPlayer }) => (
-        <div className={`w-72 bg-gradient-to-br ${isCurrentPlayer ? (player.id === 1 ? 'from-green-100 to-green-200' : 'from-red-100 to-red-200') : 'from-gray-100 to-gray-200'} p-6 flex flex-col gap-6 rounded-xl shadow-xl transition-all duration-300 ${isCurrentPlayer ? 'ring-4 ring-blue-500 transform scale-105' : 'opacity-80'}`}>
-            <div className={`flex flex-col items-center p-6 rounded-xl shadow-lg transform transition-transform duration-500 hover:scale-105`}
+        <div className={`player-panel w-64 bg-gradient-to-br ${isCurrentPlayer ? (player.id === 1 ? 'from-green-100 to-green-200' : 'from-red-100 to-red-200') : 'from-gray-100 to-gray-200'} p-4 flex flex-col gap-4 rounded-xl shadow-xl transition-all duration-300 ${isCurrentPlayer ? 'ring-4 ring-blue-500 transform scale-105' : 'opacity-80'}`}>
+            <div className={`flex flex-col items-center p-4 rounded-xl shadow-lg transform transition-transform duration-500 hover:scale-105`}
                  style={{ backgroundColor: player.color }}>
-                <div className="text-3xl font-bold mb-6 text-center">Player {player.id}</div>
-                <div className="flex flex-col gap-6 w-full">
-                    <div className="flex justify-between items-center text-2xl p-3 bg-white bg-opacity-50 rounded-lg">
+                <div className="text-2xl font-bold mb-4 text-center">Player {player.id}</div>
+                <div className="flex flex-col gap-4 w-full">
+                    <div className="flex justify-between items-center text-xl p-2 bg-white bg-opacity-50 rounded-lg">
                         <span>💰</span>
                         <span className="font-bold">${player.money}</span>
                     </div>
-                    <div className="flex justify-between items-center text-2xl p-3 bg-white bg-opacity-50 rounded-lg">
+                    <div className="flex justify-between items-center text-xl p-2 bg-white bg-opacity-50 rounded-lg">
                         <span>👥</span>
                         <span className="font-bold">{player.minions.length}</span>
                     </div>
-                    <div className="flex justify-between items-center text-2xl p-3 bg-white bg-opacity-50 rounded-lg">
+                    <div className="flex justify-between items-center text-xl p-2 bg-white bg-opacity-50 rounded-lg">
                         <span>⬡</span>
                         <span className="font-bold">{player.ownedHexes.length}</span>
                     </div>
                 </div>
             </div>
 
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3">
                 <button
-                    className={`px-6 py-4 rounded-xl text-xl font-semibold shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl ${
+                    className={`action-button px-4 py-3 rounded-xl text-lg font-semibold shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl ${
                         !isCurrentPlayer ? 'bg-gray-300 cursor-not-allowed' :
                             player.hasUsedHexAction ? 'bg-gray-400 cursor-not-allowed' :
                                 purchaseMode === 'hex' ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white' : 'bg-gradient-to-r from-indigo-400 to-purple-500 text-white'
@@ -227,7 +214,7 @@ const GameBoard = () => {
                     </div>
                 </button>
                 <button
-                    className={`px-6 py-4 rounded-xl text-xl font-semibold shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl ${
+                    className={`action-button px-4 py-3 rounded-xl text-lg font-semibold shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl ${
                         !isCurrentPlayer ? 'bg-gray-300 cursor-not-allowed' :
                             player.hasUsedMinionAction ? 'bg-gray-400 cursor-not-allowed' :
                                 purchaseMode === 'minion' ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white' : 'bg-gradient-to-r from-pink-500 to-rose-500 text-white'
@@ -244,23 +231,33 @@ const GameBoard = () => {
     );
 
     return (
-        <div className="flex h-screen bg-gradient-to-br from-slate-900 to-black p-4">
-            {/* Left Player Panel */}
-            <div className="flex items-center">
-                <PlayerPanel player={players[0]} isCurrentPlayer={currentPlayer === 0} />
-            </div>
-
-            {/* Main Game Board */}
-            <div className="flex-1 px-8 py-4 flex flex-col items-center justify-center">
-                <div className="text-5xl font-bold text-center mb-8 text-white">
-                    <span className={`turn-indicator ${currentPlayer === 0 ? 'text-green-400' : 'text-red-400'}`}>
-                        Player {currentPlayer + 1}'s Turn
-                    </span>
-                    <div className="text-2xl text-gray-300 mt-2">Round {turn}</div>
+        <div className="flex flex-col h-screen bg-gradient-to-br from-slate-900 to-black">
+            {/* Top player panels - new layout */}
+            <div className="flex justify-between pt-4 px-8 h-64">
+                {/* Player 1 panel - top left */}
+                <div className="flex-shrink-0">
+                    <PlayerPanel player={players[0]} isCurrentPlayer={currentPlayer === 0} />
                 </div>
 
+                {/* Game status header - center top */}
+                <div className="flex items-center justify-center">
+                    <div className="text-center">
+                        <div className={`text-4xl font-bold text-center text-white turn-indicator ${currentPlayer === 0 ? 'text-green-400' : 'text-red-400'}`}>
+                            Player {currentPlayer + 1}'s Turn
+                        </div>
+                        <div className="text-xl text-gray-300 mt-2">Round {turn}</div>
+                    </div>
+                </div>
 
-                <div className="border-8 border-gray-900 rounded-2xl p-6 bg-gradient-to-br from-gray-900 to-black shadow-2xl">
+                {/* Player 2 panel - top right */}
+                <div className="flex-shrink-0">
+                    <PlayerPanel player={players[1]} isCurrentPlayer={currentPlayer === 1} />
+                </div>
+            </div>
+
+            {/* Game board - middle */}
+            <div className="flex-grow flex items-center justify-center p-4">
+                <div className="border-4 border-gray-900 rounded-2xl p-4 bg-gradient-to-br from-gray-900 to-black shadow-2xl hex-grid">
                     <svg
                         width={(GRID_SIZE * HEX_WIDTH * 0.75) + HEX_RADIUS}
                         height={(GRID_SIZE * HEX_HEIGHT) + (HEX_HEIGHT / 2)}
@@ -279,8 +276,6 @@ const GameBoard = () => {
                                 )?.minions.find(m => m.position.x === col && m.position.y === row);
                                 const isSelected = selectedHex && selectedHex.x === col && selectedHex.y === row;
                                 const isAvailable = isHexAvailableForPurchase(col, row);
-
-                                // Only show available hexes when in purchase mode and showAvailableHexes is true
                                 const shouldShowAvailable = purchaseMode === 'hex' && showAvailableHexes && isAvailable;
 
                                 return (
@@ -332,80 +327,54 @@ const GameBoard = () => {
                         )}
                     </svg>
                 </div>
+            </div>
 
+            {/* End turn button - bottom */}
+            <div className="py-4 flex justify-center">
                 <button
-                    className="mt-8 px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-xl text-2xl font-semibold shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
+                    className="action-button px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-xl text-xl font-semibold shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
                     onClick={endTurn}
                 >
                     End Turn
                 </button>
-
-                {/* Purchase Overlays */}
-                {purchaseMode === 'hex' && selectedHex && (
-                    <div className="purchase-overlay fixed bottom-8 left-1/2 transform -translate-x-1/2 p-8 border-2 rounded-xl shadow-lg bg-gradient-to-br from-blue-900 to-indigo-900 text-white">
-                        <div className="text-2xl mb-4 text-center">Cost: <span className="font-bold text-yellow-300">${HEX_PRICE}</span></div>
-                        <div className="flex flex-col gap-4">
-                            <div className="text-center mb-2">
-                                {debugMode && (
-                                    <div className="mb-2">
-                                        {getAdjacencyDetails(selectedHex.x, selectedHex.y).map((detail, i) => (
-                                            <div key={i}>
-                                                Adjacent to: {detail.playerHex.x},{detail.playerHex.y} ({detail.type})
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-                            <div className="flex justify-center">
-                                <button
-                                    className="px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl text-xl font-semibold shadow-md transition-all duration-300 transform hover:scale-105"
-                                    onClick={confirmHexPurchase}
-                                >
-                                    Confirm Purchase
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {purchaseMode === 'minion' && (
-                    <div className="purchase-overlay fixed bottom-8 left-1/2 transform -translate-x-1/2 p-8 border-2 rounded-xl shadow-lg bg-gradient-to-br from-purple-900 to-pink-900 text-white flex flex-col gap-4">
-                        <div className="text-xl text-center mb-2">Select Minion Type</div>
-                        <div className="flex flex-wrap gap-4 justify-center">
-                            {MINION_TYPES.map((minion, idx) => (
-                                <button
-                                    key={minion.name}
-                                    className={`px-6 py-3 rounded-xl text-lg font-semibold shadow-md transition-all duration-300 ${
-                                        selectedMinionType === idx
-                                            ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-white transform scale-105'
-                                            : 'bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700'
-                                    }`}
-                                    onClick={() => setSelectedMinionType(idx)}
-                                >
-                                    {minion.name}
-                                    <div className="text-sm mt-1 bg-white bg-opacity-20 px-2 py-1 rounded-md">${minion.price}</div>
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-                )}
-
-                {/* Debug Legend */}
-                {debugMode && (
-                    <div className="mt-4 p-4 bg-black bg-opacity-70 text-white rounded-lg">
-                        <h3 className="text-lg font-bold mb-2">Adjacency Rules</h3>
-                        <div>
-                            <p>Hexes can only be purchased adjacent to owned hexes</p>
-                            <p>Adjacency follows proper hexagonal grid rules</p>
-                        </div>
-                    </div>
-                )}
             </div>
 
-            {/* Right Player Panel */}
-            <div className="flex items-center">
-                <PlayerPanel player={players[1]} isCurrentPlayer={currentPlayer === 1} />
-            </div>
+            {/* Overlays */}
+            {purchaseMode === 'hex' && selectedHex && (
+                <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 p-6 border-2 rounded-xl shadow-lg bg-gradient-to-br from-blue-900 to-indigo-900 text-white z-50 purchase-overlay">
+                    <div className="text-xl mb-3 text-center">Cost: <span className="font-bold text-yellow-300">${HEX_PRICE}</span></div>
+                    <div className="flex justify-center">
+                        <button
+                            className="action-button px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl text-lg font-semibold shadow-md transition-all duration-300 transform hover:scale-105"
+                            onClick={confirmHexPurchase}
+                        >
+                            Confirm Purchase
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {purchaseMode === 'minion' && (
+                <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 p-6 border-2 rounded-xl shadow-lg bg-gradient-to-br from-purple-900 to-pink-900 text-white flex flex-col gap-3 z-50 purchase-overlay">
+                    <div className="text-lg text-center mb-2">Select Minion Type</div>
+                    <div className="flex flex-wrap gap-3 justify-center">
+                        {MINION_TYPES.map((minion, idx) => (
+                            <button
+                                key={minion.name}
+                                className={`px-4 py-2 rounded-xl text-base font-semibold shadow-md transition-all duration-300 ${
+                                    selectedMinionType === idx
+                                        ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-white transform scale-105'
+                                        : 'bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700'
+                                }`}
+                                onClick={() => setSelectedMinionType(idx)}
+                            >
+                                {minion.name}
+                                <div className="text-sm mt-1 bg-white bg-opacity-20 px-2 py-1 rounded-md">${minion.price}</div>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
