@@ -12,13 +12,13 @@ const MINION_TYPES = [
     { name: "Elite Minion", price: 40 }
 ];
 
-// Updated Player 2 starting position to top right (8,0) instead of bottom right (8,8)
+// Corrected starting positions - Fixed player 2 position inconsistency
 const initialPlayers = [
     {
         id: 1,
         money: 100,
         minions: [],
-        ownedHexes: [{x: 0, y: 0}],
+        ownedHexes: [{x: 0, y: 0},{x: 0, y: 1},{x: 1, y: 0}],
         color: 'rgb(220, 252, 231)',
         hasUsedHexAction: false,
         hasUsedMinionAction: false
@@ -27,7 +27,7 @@ const initialPlayers = [
         id: 2,
         money: 100,
         minions: [],
-        ownedHexes: [{x: 8, y: 8}], // Changed from {x: 8, y: 8} to top-right corner
+        ownedHexes: [{x: 8, y: 8},{x: 8, y: 7},{x: 7, y: 8}], // Consistent with comment in code
         color: 'rgb(254, 202, 202)',
         hasUsedHexAction: false,
         hasUsedMinionAction: false
@@ -42,12 +42,38 @@ const GameBoard = () => {
     const [selectedMinionType, setSelectedMinionType] = useState(null);
     const [turn, setTurn] = useState(1);
     const [showAvailableHexes, setShowAvailableHexes] = useState(false);
+    const [debugMode, setDebugMode] = useState(false);
 
-    // Simple adjacency check
-    const isAdjacent = (hex1, hex2) => {
+    // Separate adjacency checks for different cases
+    // Orthogonal adjacency (side-by-side)
+    const isOrthogonalAdjacent = (hex1, hex2) => {
         const dx = Math.abs(hex1.x - hex2.x);
         const dy = Math.abs(hex1.y - hex2.y);
-        return (dx === 1 && dy === 0) || (dx === 0 && dy === 1) || (dx === 1 && dy === 1);
+
+        // For hexagonal grid (using axial coordinates), adjacency is different
+        // A hex is adjacent if coordinates differ by at most 1 in only one direction
+        // This depends on whether we're using even-q or odd-q offset
+        if (hex1.x % 2 === 0) { // even column
+            return (dx === 1 && dy === 0) ||
+                (dx === 0 && dy === 1) ||
+                (dx === 0 && dy === 1) ||
+                (dx === 1 && dy === 1 && hex1.y > hex2.y); // diagonal only for specific direction
+        } else { // odd column
+            return (dx === 1 && dy === 0) ||
+                (dx === 0 && dy === 1) ||
+                (dx === 1 && dy === 1 && hex1.y < hex2.y); // diagonal only for specific direction
+        }
+    };
+
+    // We now use only orthogonal adjacency and remove the diagonal adjacency concept
+    const isAdjacent = (hex1, hex2) => {
+        return isOrthogonalAdjacent(hex1, hex2);
+    };
+
+    // Debug function to show adjacency type
+    const getAdjacencyType = (hex1, hex2) => {
+        if (isOrthogonalAdjacent(hex1, hex2)) return "adjacent";
+        return "not adjacent";
     };
 
     // Check if hex is available for purchase
@@ -62,11 +88,32 @@ const GameBoard = () => {
         return players[currentPlayer].ownedHexes.some(playerHex => isAdjacent(playerHex, hex));
     };
 
+    // Get adjacency details for debugging
+    const getAdjacencyDetails = (x, y) => {
+        const hex = { x, y };
+        const adjacentPlayerHexes = players[currentPlayer].ownedHexes.filter(playerHex =>
+            isAdjacent(playerHex, hex)
+        );
+
+        return adjacentPlayerHexes.map(playerHex => ({
+            playerHex,
+            type: getAdjacencyType(playerHex, hex)
+        }));
+    };
+
     const handleHexClick = (x, y) => {
         if (purchaseMode === 'hex' && !players[currentPlayer].hasUsedHexAction) {
             if (isHexAvailableForPurchase(x, y)) {
                 // Only allow selection of a single hex
                 setSelectedHex({ x, y });
+
+                if (debugMode) {
+                    const details = getAdjacencyDetails(x, y);
+                    console.log(`Hex ${x},${y} is adjacent to:`);
+                    details.forEach(detail => {
+                        console.log(`- Hex ${detail.playerHex.x},${detail.playerHex.y} (${detail.type})`);
+                    });
+                }
             }
         } else if (purchaseMode === 'minion' && selectedMinionType !== null && !players[currentPlayer].hasUsedMinionAction) {
             if (players[currentPlayer].ownedHexes.some(h => h.x === x && h.y === y)) {
@@ -212,6 +259,7 @@ const GameBoard = () => {
                     <div className="text-2xl text-gray-300 mt-2">Round {turn}</div>
                 </div>
 
+
                 <div className="border-8 border-gray-900 rounded-2xl p-6 bg-gradient-to-br from-gray-900 to-black shadow-2xl">
                     <svg
                         width={(GRID_SIZE * HEX_WIDTH * 0.75) + HEX_RADIUS}
@@ -239,9 +287,9 @@ const GameBoard = () => {
                                     <g key={`${col}-${row}`} transform={`translate(${x},${y})`}>
                                         <polygon
                                             points={getHexPoints()}
-                                            stroke={shouldShowAvailable ? "rgba(255, 255, 255, 0.8)" : "rgba(100, 100, 100, 0.6)"}
+                                            stroke={shouldShowAvailable ? "rgba(0, 255, 0, 0.8)" : "rgba(100, 100, 100, 0.6)"}
                                             strokeWidth={shouldShowAvailable ? "3" : "2"}
-                                            fill={owner?.color || (shouldShowAvailable ? 'rgba(255, 215, 0, 0.25)' : 'rgba(40, 40, 40, 0.8)')} // Changed available hex color to gold/yellow
+                                            fill={owner?.color || (shouldShowAvailable ? 'rgba(0, 255, 0, 0.25)' : 'rgba(40, 40, 40, 0.8)')}
                                             className={`
                                                 hex-cell
                                                 ${isSelected ? 'selected' : ''}
@@ -297,6 +345,17 @@ const GameBoard = () => {
                     <div className="purchase-overlay fixed bottom-8 left-1/2 transform -translate-x-1/2 p-8 border-2 rounded-xl shadow-lg bg-gradient-to-br from-blue-900 to-indigo-900 text-white">
                         <div className="text-2xl mb-4 text-center">Cost: <span className="font-bold text-yellow-300">${HEX_PRICE}</span></div>
                         <div className="flex flex-col gap-4">
+                            <div className="text-center mb-2">
+                                {debugMode && (
+                                    <div className="mb-2">
+                                        {getAdjacencyDetails(selectedHex.x, selectedHex.y).map((detail, i) => (
+                                            <div key={i}>
+                                                Adjacent to: {detail.playerHex.x},{detail.playerHex.y} ({detail.type})
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
                             <div className="flex justify-center">
                                 <button
                                     className="px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl text-xl font-semibold shadow-md transition-all duration-300 transform hover:scale-105"
@@ -327,6 +386,17 @@ const GameBoard = () => {
                                     <div className="text-sm mt-1 bg-white bg-opacity-20 px-2 py-1 rounded-md">${minion.price}</div>
                                 </button>
                             ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Debug Legend */}
+                {debugMode && (
+                    <div className="mt-4 p-4 bg-black bg-opacity-70 text-white rounded-lg">
+                        <h3 className="text-lg font-bold mb-2">Adjacency Rules</h3>
+                        <div>
+                            <p>Hexes can only be purchased adjacent to owned hexes</p>
+                            <p>Adjacency follows proper hexagonal grid rules</p>
                         </div>
                     </div>
                 )}
