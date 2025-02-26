@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../styles/HexGrid.css';
 
-const GRID_SIZE = 9;
+const GRID_SIZE = 8;
 const HEX_RADIUS = 40;
 const HEX_WIDTH = 2 * HEX_RADIUS;
 const HEX_HEIGHT = Math.sqrt(3) * HEX_RADIUS;
@@ -18,7 +18,7 @@ const initialPlayers = [
         id: 1,
         money: 100,
         minions: [],
-        ownedHexes: [{x: 0, y: 0},{x: 0, y: 1},{x: 1, y: 0}],
+        ownedHexes: [{x: 0, y: 0},{x: 1, y: 0},{x: 2, y: 0},{x: 0, y: 1},{x: 1, y: 1}],
         color: 'rgb(220, 252, 231)',
         hasUsedHexAction: false,
         hasUsedMinionAction: false
@@ -27,7 +27,7 @@ const initialPlayers = [
         id: 2,
         money: 100,
         minions: [],
-        ownedHexes: [{x: 8, y: 8},{x: 8, y: 7},{x: 7, y: 8}],
+        ownedHexes: [{x: 7, y: 7},{x: 6, y: 7},{x: 5, y: 7},{x: 6, y: 6},{x: 7, y: 6}],
         color: 'rgb(254, 202, 202)',
         hasUsedHexAction: false,
         hasUsedMinionAction: false
@@ -266,7 +266,7 @@ const GameBoard = () => {
                         {[...Array(GRID_SIZE)].map((_, row) =>
                             [...Array(GRID_SIZE)].map((_, col) => {
                                 const x = col * HEX_WIDTH * 0.75;
-                                const y = row * HEX_HEIGHT + (col % 2 === 1 ? HEX_HEIGHT / 2 : 0);
+                                const y = row * HEX_HEIGHT + (col % 2 === 0 ? HEX_HEIGHT / 2 : 0);
 
                                 const owner = players.find(p =>
                                     p.ownedHexes.some(h => h.x === col && h.y === row)
@@ -315,11 +315,11 @@ const GameBoard = () => {
                                             x={HEX_RADIUS}
                                             y={HEX_HEIGHT - 10}
                                             textAnchor="middle"
-                                            fill="white"
+                                            fill="red"
                                             fontSize="12"
                                             className="coordinate-label"
                                         >
-                                            {col},{row}
+                                            {row+1},{col+1}
                                         </text>
                                     </g>
                                 );
