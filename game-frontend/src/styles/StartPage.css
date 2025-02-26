@@ -1,4 +1,4 @@
-/* ตั้งค่าพื้นหลังให้เต็มจอ */
+/* Base styles for full-screen background */
 .start-page {
     position: relative;
     width: 100vw;
@@ -7,65 +7,156 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
 }
 
-/* ทำให้พื้นหลังมืดลงเพื่อให้ตัวหนังสืออ่านง่าย */
+/* Improved overlay with subtle gradient */
 .overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.4);
+    background: linear-gradient(to bottom,
+    rgba(0, 0, 0, 0.5),
+    rgba(0, 0, 0, 0.7));
+    backdrop-filter: blur(2px);
 }
 
-/* กล่องคอนเทนต์ตรงกลาง */
+/* Content container with animation */
 .content {
     position: relative;
     text-align: center;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+    max-width: 90%;
 }
 
-/* สไตล์ของ Title */
+.content.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Enhanced title with text shadow and border */
 .title {
-    font-size: 100px;
-    font-weight: bold;
+    font-size: clamp(40px, 8vw, 100px); /* Responsive font size */
+    font-weight: 800;
     color: #C6EBC5;
-    background-color: #DF826C;
-    padding: 50px 40px;
-    border-radius: 10px;
+    background-color: rgba(223, 130, 108, 0.9);
+    padding: 40px 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+    border: 3px solid #C6EBC5;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* ปุ่มต่างๆ */
+.title:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+}
+
+/* Button group with staggered animation */
 .button-group {
-    margin-top: 40px;
+    margin-top: 50px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 25px;
+    align-items: center;
 }
 
+/* Base button styles */
 .btn {
-    width: 250px;
-    padding: 15px;
-    font-size: 24px;
+    position: relative;
+    width: 280px;
+    padding: 18px 20px;
+    font-size: 26px;
     font-weight: bold;
     color: white;
     border: none;
     border-radius: 30px;
     cursor: pointer;
-    transition: 0.3s;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
+.btn:active {
+    transform: translateY(3px);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Start button specific styles */
 .btn-start {
-    background-color: #007bff;
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    border: 2px solid #0066cc;
 }
 
 .btn-start:hover {
-    background-color: #0056b3;
+    background: linear-gradient(135deg, #0069d9, #0043a0);
     transform: scale(1.05);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
 }
 
+/* Home button specific styles */
 .btn-home {
-    background-color: #6c757d;
+    background: linear-gradient(135deg, #6c757d, #495057);
+    border: 2px solid #5a6268;
 }
 
 .btn-home:hover {
-        background-color: #495057;
-        transform: scale(1.05);
+    background: linear-gradient(135deg, #5a6268, #343a40);
+    transform: scale(1.05);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* Button effect - ripple */
+.btn-effect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+    transform: scale(0);
+    opacity: 0;
+    transition: transform 0.5s, opacity 0.3s;
+}
+
+.btn:hover .btn-effect {
+    transform: scale(1);
+    opacity: 1;
+}
+
+/* Media queries for responsive design */
+@media (max-width: 768px) {
+    .title {
+        padding: 25px 20px;
+    }
+
+    .btn {
+        width: 220px;
+        padding: 15px;
+        font-size: 22px;
+    }
+
+    .button-group {
+        margin-top: 35px;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .title {
+        padding: 20px 15px;
+    }
+
+    .btn {
+        width: 180px;
+        padding: 12px;
+        font-size: 18px;
+    }
 }
