@@ -48,9 +48,9 @@ public class Minion {
         this.hp = Hp;
     }
 
-    protected int move(int direction) {
+    protected boolean move(int direction) {
         if(this.ownby.getBudget()<=0){
-            return 0;
+            return false;
         }else{
             this.ownby.budget -= 1;
         }
@@ -60,17 +60,17 @@ public class Minion {
 
         if (newPos == -1) {
             System.out.println("cant move to that direction");
-            return -1;
+            return false;
         }
         if (Hex.getHex(newPosX,newPosY).getIsminion()!=null) {
             System.out.println("cant move to that direction");
-            return -1;
+            return false;
         }
         Hex.getHex(row,col).setIsminion(null);
         row = newPosX;
         col = newPosY;
         Hex.getHex(row,col).setIsminion(this);
-        return 1;
+        return true;
     }
 
     protected void shoot(int direction,double cost) {

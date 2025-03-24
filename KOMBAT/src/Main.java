@@ -40,7 +40,12 @@ public class Main {
         int maxturn=(int)GameConfig.getInstance().get("max_turns");
         Strategy a= ReadStrategy.readfile("KOMBAT/src/Sample_strat.txt");
         Strategy b= ReadStrategy.readfile("KOMBAT/src/testStategy.txt");
-        Minion.minionTypeMap.put("",new MinionType("",5,a));
+        Minion.minionTypeMap.put("1",new MinionType("",5,a));
+        Minion.minionTypeMap.put("2",new MinionType("",10,b));
+        System.out.println("== Free Spawn Phase ==");
+
+        freeSpawn(player1, myObj, "Player 1");
+        freeSpawn(player2, myObj, "Player 2");
         for(int i=0;i<maxturn/2;i++){
             printBoard(player1);
             System.out.println("Player 1's turn");
@@ -168,5 +173,51 @@ public class Main {
         return sum;
     }
 
+    private static void freeSpawn(Player player, Scanner myObj, String playerName) {
+        if (player instanceof Bot) {
+            // Bot: เลือกตำแหน่งและ type แบบอัตโนมัติ
+            for (int i = 8; i > 0; i--) {
+                for (int j = 8; j > 0; j--) {
+                    if (Hex.getHex(i, j).getOwnby() == player && Hex.getHex(i, j).getIsminion() == null) {
+                        String type = Minion.minionTypeMap.keySet().iterator().next(); // ใช้ type แรกที่มี
+                        Minion m = new Minion(player, type);
+                        Hex.getHex(i, j).setIsminion(m);
+                        player.minion.add(m);
+                        m.setRow(i);
+                        m.setCol(j);
+                        System.out.println(playerName + " (Bot) spawned a free minion at " + i + "," + j);
+                        return;
+                    }
+                }
+            }
+        } else {
+            // Manual Player
+            System.out.println(playerName + ": choose where to place your free minion (e.g., 11 = row 1, col 1)");
+            int pos = Integer.parseInt(myObj.nextLine());
+            int x = pos / 10;
+            int y = pos % 10;
+            while (Hex.getHex(x, y).getIsminion() != null || Hex.getHex(x, y).getOwnby() != player) {
+                System.out.println("Invalid position. Must be in your spawn area and empty.");
+                pos = Integer.parseInt(myObj.nextLine());
+                x = pos / 10;
+                y = pos % 10;
+            }
+
+            System.out.println("Available minion types: " + Minion.minionTypeMap.keySet());
+            System.out.print("Enter minion type: ");
+            String type = myObj.nextLine();
+            while (!Minion.minionTypeMap.containsKey(type)) {
+                System.out.println("Invalid type. Try again:");
+                type = myObj.nextLine();
+            }
+
+            Minion m = new Minion(player, type);
+            Hex.getHex(x, y).setIsminion(m);
+            player.minion.add(m);
+            m.setRow(x);
+            m.setCol(y);
+            System.out.println(playerName + " spawned a free minion at " + x + "," + y);
+        }
+    }
 }
 

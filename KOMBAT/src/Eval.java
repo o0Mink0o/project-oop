@@ -16,6 +16,7 @@ class Eval {
         if(thisMStrat==null){return;}
         for (Statement stmt : thisMStrat.statements) {
             if(execute(stmt)==0){
+                System.out.println("this minion executed");
                 break;
             }
         }
@@ -62,15 +63,11 @@ class Eval {
     }
 
     private int executeMove(MoveCommand stmt) {
-        int status = this.m.move(getIntDirec(stmt.direction));
-        if (status == 0) {
-            return 0; // ถ้าขยับไม่ได้ ให้หยุด execution
-        }
-        if (status == 1) {
+        boolean status = this.m.move(getIntDirec(stmt.direction));
+        if (status) {
             System.out.println("Moving " + stmt.direction);
-            return 0; // ถ้าขยับสำเร็จ ให้หยุด eval ทันที
         }
-        return 1;
+        return 0;
     }
 
     private int executeAttack(AttackCommand stmt) {

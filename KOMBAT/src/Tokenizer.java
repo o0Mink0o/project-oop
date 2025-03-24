@@ -120,7 +120,7 @@ public class Tokenizer {
     // ✅ เช็คว่า Token เป็น Identifier หรือไม่
     public boolean isIdentifier(String token) {
         if (token == null || token.isEmpty()) return false;
-        if (RESERVED_WORDS.contains(token)) return false; // ❌ ห้ามใช้ Reserved Words
+        if (RESERVED_WORDS.contains(token)||gamestatus_word.contains(token)) return false; // ❌ ห้ามใช้ Reserved Words
         if (!Character.isLetter(token.charAt(0))) return false; // ❌ ต้องขึ้นต้นด้วยตัวอักษร
 
         // ✅ เช็คว่าอักขระที่เหลือเป็นตัวอักษรหรือตัวเลข

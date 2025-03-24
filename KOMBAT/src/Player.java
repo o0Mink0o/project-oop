@@ -111,9 +111,13 @@ public class Player {
                 }
             }
 
-                if(Spawnminion(x, y)){
-                    break;
-                }
+            System.out.println("Available minion types: " + Minion.minionTypeMap.keySet());
+            System.out.print("Enter minion type: ");
+            String type = myObj.nextLine().trim();
+
+            if (Spawnminion(x, y, type)) {
+                break;
+            }
         }
 
 
@@ -123,7 +127,9 @@ public class Player {
                 continue;
             }
             Eval evaluator = new Eval(m.getEnv(), this.getGlobalEnv());
+            System.out.println("execute minion at"+ m.getRealRow()+m.getRealCol());
             evaluator.evaluate(m,this);
+
         }
     }
 
@@ -135,7 +141,7 @@ public class Player {
         return (int) this.budget;
     }
 
-    protected boolean Spawnminion(int x, int y) {
+    protected boolean Spawnminion(int x, int y, String type) {
         double spawncost = (double) GameConfig.getInstance().get("spawn_cost");
 
         // Test: เงินไม่พอ
@@ -158,7 +164,7 @@ public class Player {
 
         // Test: การสร้างมินเนี่ยนสำเร็จ
         budget -= spawncost;
-        Minion minion1 = new Minion(this,"");
+        Minion minion1 = new Minion(this,type);
         Hex.getHex(x, y).setIsminion(minion1);
         minion.add(minion1);
         minion1.setCol(y);

@@ -1,4 +1,6 @@
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -20,23 +22,21 @@ public class Bot extends Player{
         }
 
         if(budget > 9000){
-            boolean flag=false;
-            while(!flag){
+            while(true){
                 buyhexLoop:
                 for(int i=8;i>0;i--){
                     for(int j=8;j>0;j--){
                         if(Hex.getHex(i,j).canbuy(this)){
                             buyspawmhex(i,j);
-                            flag=true;
                             break buyhexLoop;
                         }
                     }
                 }
+                break;
             }
         }
         if(budget > 7000){
-            boolean flag2=false;
-            while(!flag2) {
+            while(true) {
                 if (spawnleft == 0) {
                     System.out.println("You have 0 spawnleft");
                     break;
@@ -44,12 +44,14 @@ public class Bot extends Player{
                 SpawnminionLoop:
                 for(int i=8;i>0;i--){
                     for(int j=8;j>0;j--){
-                        if(Spawnminion(i, j)){
-                            flag2=true;
+                        List<String> types = new ArrayList<>(Minion.minionTypeMap.keySet());
+                        String randomType = types.get(new Random().nextInt(types.size()));
+                        if(Spawnminion(i, j,randomType)){
                             break SpawnminionLoop;
                         }
                     }
                 }
+                break;
             }
         }
 

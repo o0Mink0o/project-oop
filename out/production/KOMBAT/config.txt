@@ -5,5 +5,5 @@ init_hp=100
 turn_budget=90
 max_budget=23456
 interest_pct=5
-max_turns=69
+max_turns=10
 max_spawns=47
