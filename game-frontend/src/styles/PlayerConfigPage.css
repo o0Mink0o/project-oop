@@ -13,11 +13,11 @@
 
 /* สไตล์หัวข้อ */
 .title {
-    font-size: 32px;
+    font-size: 64px;
     font-weight: bold;
     margin-bottom: 40px;
     color: #fff;
-    background-color: #f0a58c;
+    background-color: #7A73D1;
     padding: 15px 30px;
     border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.3);
