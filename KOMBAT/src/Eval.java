@@ -1,17 +1,20 @@
 class Eval {
-    private final Environment env;
+    private final Environment localEnv;
+    private final Environment globalEnv;
     private Minion m;
     private Player p;
 
-    public Eval(Environment env) {
-        this.env = env;
+    public Eval(Environment localEnv, Environment globalEnv) {
+        this.localEnv = localEnv;
+        this.globalEnv = globalEnv;
     }
 
-    public void evaluate(Strategy strategy, Minion newMinion,Player player) {
+    public void evaluate(Minion newMinion,Player player) {
         this.m=newMinion;
         this.p=player;
-        if(strategy==null){return;}
-        for (Statement stmt : strategy.statements) {
+        Strategy thisMStrat =newMinion.getStrategy();
+        if(thisMStrat==null){return;}
+        for (Statement stmt : thisMStrat.statements) {
             if(execute(stmt)==0){
                 break;
             }
@@ -51,7 +54,11 @@ class Eval {
 
     private void executeAssignment(AssignmentStatement stmt) {
         long value = evaluateExpression(stmt.expression);
-        env.assign(stmt.identifier, value);
+        if (Environment.isGlobal(stmt.identifier)) {
+            globalEnv.forceAssign(stmt.identifier, value);
+        } else {
+            localEnv.assign(stmt.identifier, value);
+        }
     }
 
     private int executeMove(MoveCommand stmt) {
@@ -127,7 +134,16 @@ class Eval {
         if (expr instanceof NumberLiteral) {
             return ((NumberLiteral) expr).value;
         } else if (expr instanceof Variable) {
-            return env.get(((Variable) expr).name);
+            String name = ((Variable) expr).name;
+            if (Environment.isGlobal(name)) {
+                long val = globalEnv.get(name);
+                System.out.println("[GLOBAL] Read " + name + " = " + val);
+                return val;
+            } else {
+                long val = localEnv.get(name);
+                System.out.println("[LOCAL] Read " + name + " = " + val);
+                return val;
+            }
         } else if (expr instanceof gameStatus) {
             return evaluateGameStatus((gameStatus) expr);
         } else if (expr instanceof BinaryExpression) {

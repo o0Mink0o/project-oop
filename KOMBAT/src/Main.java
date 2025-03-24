@@ -38,15 +38,16 @@ public class Main {
             }
         }
         int maxturn=(int)GameConfig.getInstance().get("max_turns");
+        Strategy a= ReadStrategy.readfile("KOMBAT/src/Sample_strat.txt");
+        Strategy b= ReadStrategy.readfile("KOMBAT/src/testStategy.txt");
+        Minion.minionTypeMap.put("",new MinionType("",5,a));
         for(int i=0;i<maxturn/2;i++){
             printBoard(player1);
-            Strategy a= ReadStrategy.readfile("KOMBAT/src/Sample_strat.txt");
             System.out.println("Player 1's turn");
-            player1.executeTurn(a);
+            player1.executeTurn();
             printBoard(player1);
-            Strategy b= ReadStrategy.readfile("KOMBAT/src/testStategy.txt");
             System.out.println("Bot 1's turn");
-            player2.executeTurn(b);
+            player2.executeTurn();
             printBoard(player1);
         }
     }

@@ -9,7 +9,7 @@ public class Bot extends Player{
     }
     //fixed execute
     @Override
-    protected void executeTurn(Strategy s) {
+    protected void executeTurn() {
         turn++;
         this.budget += (double)GameConfig.getInstance().get("turn_budget");
         intRate=(double)GameConfig.getInstance().get("interest_pct")*Math.log10(budget)*Math.log(turn);
@@ -44,7 +44,7 @@ public class Bot extends Player{
                 SpawnminionLoop:
                 for(int i=8;i>0;i--){
                     for(int j=8;j>0;j--){
-                        if(Spawnminion(i,j) == 1){
+                        if(Spawnminion(i, j)){
                             flag2=true;
                             break SpawnminionLoop;
                         }
@@ -58,8 +58,8 @@ public class Bot extends Player{
                 minion.remove(m);
                 continue;
             }
-            Eval evaluator = new Eval(new Environment());
-            evaluator.evaluate(s,m,this);
+            Eval evaluator = new Eval(m.getEnv(), this.getGlobalEnv());
+            evaluator.evaluate(m,this);
         }
     }
 }

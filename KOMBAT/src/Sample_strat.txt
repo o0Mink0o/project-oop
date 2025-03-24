@@ -48,7 +48,7 @@ while (3 - m) {  # made less than 3 random moves
       else if ((dir - 2) * (nearby down % 10 + 1) ^ 2) then move down
       else if ((dir - 1) * (nearby downright % 10 + 1) ^ 2) then move downright
       else if (dir * (nearby upright % 10 + 1) ^ 2) then move upright
-      else if ((nearby up % 10 + 1) ^ 2) move up
+      else if ((nearby up % 10 + 1) ^ 2) then  move up
       else success = 0
       if (success) then try = 3 else try = try + 1
     }

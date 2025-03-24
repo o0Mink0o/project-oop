@@ -1,15 +1,26 @@
+import java.util.HashMap;
+import java.util.Map;
+
 public class Minion {
-    private int def=5;
+    private int def;
     private int hp=100;
-    private Strategy strategy;
     private int col,row;
     final Player ownby;
+    final Strategy strategy;
+    private Environment env = new Environment();
+    final static Map<String, MinionType> minionTypeMap = new HashMap<>();
 
-    protected Minion(Player ownby) {
+    public Environment getEnv() { return env; }
+
+    protected Minion(Player ownby,String typeName) {
         this.ownby = ownby;
+        MinionType thisType = minionTypeMap.get(typeName);
+        this.strategy = thisType.strategy;
+        this.def = thisType.def;
         this.hp= (int)GameConfig.getInstance().get("init_hp");
     }
 
+    protected Strategy getStrategy(){return strategy;}
 
     protected int getDef() {
         return def;

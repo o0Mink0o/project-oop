@@ -8,12 +8,16 @@ public class Player {
     protected int spawnleft;
     protected int turn=0;
     protected double intRate;
+    protected Environment globalEnv = new Environment();
 
     public Player() {
         this.budget=(double) GameConfig.getInstance().get("init_budget");
         this.spawnleft=(int)GameConfig.getInstance().get("max_spawns");
     }
 
+    public Environment getGlobalEnv() {
+        return globalEnv;
+    }
 
 
     protected int getSpawnLeft() {
@@ -24,7 +28,7 @@ public class Player {
         return (int)intRate;
     }
 
-    protected void executeTurn(Strategy s) {
+    protected void executeTurn() {
         turn++;
         this.budget += (double)GameConfig.getInstance().get("turn_budget");
         intRate=(double)GameConfig.getInstance().get("interest_pct")*Math.log10(budget)*Math.log(turn);
@@ -57,17 +61,19 @@ public class Player {
 
                     if (x < 1 || x > 8 || y < 1 || y > 8) {
                         System.out.println("Invalid row or col. Try again.");
+                        System.out.println("Enter row,col where you want to buy (11->(1,1))");
                     } else {
                         break; // Valid input, exit the loop
                     }
                 } catch (NumberFormatException e) {
                     System.out.println("Invalid input, please enter numbers only. Try again.");
+                    System.out.println("Enter row,col where you want to buy (11->(1,1))");
                 }
             }
 
-            buyspawmhex(x, y);
-            System.out.println("Do you want to buy more spawn hex? (Y/N)");
-            input = myObj.nextLine();
+            if(buyspawmhex(x, y)){
+                break;
+            }
 
         }
 
@@ -85,21 +91,29 @@ public class Player {
                 System.out.println("You have 0 spawnleft");
                 break;
             }
-            System.out.println("Enter row,col where u want to spawn (11->(1,1))");
-            pos = myObj.nextInt();
-            myObj.nextLine();
+            int x, y;
+            System.out.println("Enter row,col where you want to buy (11->(1,1))");
+            while (true) {
+                try {
+                    pos = Integer.parseInt(myObj.nextLine().trim()); // Using parseInt to handle exceptions
+                    x = pos / 10;
+                    y = pos % 10;
 
-                int x, y;
-                x = pos / 10;
-                y = pos % 10;
-                if (x < 1 || x > 8 || y < 1 || y > 8) {
-                    System.out.println("Invalid row or col");
-                    continue;
+                    if (x < 1 || x > 8 || y < 1 || y > 8) {
+                        System.out.println("Invalid row or col. Try again.");
+                        System.out.println("Enter row,col where you want to buy (11->(1,1))");
+                    } else {
+                        break; // Valid input, exit the loop
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input, please enter numbers only. Try again.");
+                    System.out.println("Enter row,col where you want to buy (11->(1,1))");
                 }
+            }
 
-                Spawnminion(x, y);
-                System.out.println("Do you want to spawn more minion? (Y/N)");
-                input = myObj.nextLine();
+                if(Spawnminion(x, y)){
+                    break;
+                }
         }
 
 
@@ -108,8 +122,8 @@ public class Player {
                 minion.remove(m);
                 continue;
             }
-            Eval evaluator = new Eval(new Environment());
-            evaluator.evaluate(s,m,this);
+            Eval evaluator = new Eval(m.getEnv(), this.getGlobalEnv());
+            evaluator.evaluate(m,this);
         }
     }
 
@@ -121,53 +135,53 @@ public class Player {
         return (int) this.budget;
     }
 
-    protected int Spawnminion(int x, int y) {
+    protected boolean Spawnminion(int x, int y) {
         double spawncost = (double) GameConfig.getInstance().get("spawn_cost");
 
         // Test: เงินไม่พอ
         if (budget < spawncost) {
             System.out.println("Not enough money");
-            return 0;
+            return false;
         }
 
         // Test: พื้นที่มีมินเนี่ยนอยู่แล้ว
         if (Hex.getHex(x, y).getIsminion() != null) {
             System.out.println("There is already a minion on this board");
-            return 0;
+            return false;
         }
 
         // Test: พื้นที่ไม่ใช่พื้นที่ของผู้เล่น
         if (Hex.getHex(x, y).getOwnby() != this) {
             System.out.println("This is not your spawn hex");
-            return 0;
+            return false;
         }
 
         // Test: การสร้างมินเนี่ยนสำเร็จ
         budget -= spawncost;
-        Minion minion1 = new Minion(this);
+        Minion minion1 = new Minion(this,"");
         Hex.getHex(x, y).setIsminion(minion1);
         minion.add(minion1);
         minion1.setCol(y);
         minion1.setRow(x);
         System.out.println("Spawned minion at board " + x + "," + y);
         spawnleft--;
-        return 1;
+        return true;
     }
 
 
-    protected void buyspawmhex(int x, int y) {
+    protected boolean buyspawmhex(int x, int y) {
         double hexcost = (double) GameConfig.getInstance().get("hex_purchase_cost");
 
         // Test: ไม่มีงบประมาณพอ
         if (budget < hexcost) {
             System.out.println("Not enough money");
-            return;
+            return false;
         }
 
         // Test: Hex มีเจ้าของอยู่แล้ว
         if (Hex.getHex(x, y).getOwnby() != null) {
             System.out.println("This board already has an owner");
-            return;
+            return false;
         }
 
         // Test: การซื้อสำเร็จ
@@ -175,10 +189,12 @@ public class Player {
             budget -= hexcost;
             Hex.getHex(x, y).setOwnby(this);
             System.out.println("Buying board " + x + "," + y);
+            return true;
         } else {
             // Test: Hex ที่ซื้อไม่ได้เชื่อมต่อกับพื้นที่เดิม
             System.out.println("New spawnable board must be adjacent to your spawnable hexes");
         }
+        return false;
     }
 
 
