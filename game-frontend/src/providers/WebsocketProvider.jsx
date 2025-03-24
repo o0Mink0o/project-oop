@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useWebSocket } from "../hooks/useWebsocket";
 
-const WebSocketProvider = ({ children }) => {
+export const WebSocketProvider = ({ children }) => {
     const { connect } = useWebSocket();
 
     useEffect(() => {
