@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/ModeSelectionPage.css';
-import BackButton from './BackButton';
+    import BackButton from './BackButton';
 import botVsBotImg from '../assets/image/bvb.png';
 import botVsPlayerImg from '../assets/image/bvp.png';
 import playerVsPlayerImg from '../assets/image/pvp.png';

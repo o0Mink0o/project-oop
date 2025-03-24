@@ -36,12 +36,13 @@
 }
 
 /* Enhanced title with text shadow and border */
+
 .title {
-    font-size: clamp(40px, 8vw, 100px); /* Responsive font size */
+    font-size: clamp(120px, 20vw, 240px); /* Increased from 40px/8vw/100px */
     font-weight: 800;
     color: #C6EBC5;
     background-color: rgba(223, 130, 108, 0.9);
-    padding: 40px 30px;
+    padding: 40px 40px; /* Slightly increased horizontal padding */
     border-radius: 15px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
     text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
