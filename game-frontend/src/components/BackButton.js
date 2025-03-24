@@ -12,9 +12,9 @@ const BackButton = () => {
     return (
         <button
             onClick={goBack}
-            className="back-button"
+            className="btn btn-back"
         >
-            Back
+            <span className="btn-icon">←</span> BACK
         </button>
     );
 };

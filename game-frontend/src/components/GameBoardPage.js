@@ -18,7 +18,7 @@ const initialPlayers = [
         id: 1,
         money: 100,
         minions: [],
-        ownedHexes: [{x: 0, y: 0},{x: 1, y: 0},{x: 2, y: 0},{x: 0, y: 1},{x: 1, y: 1}],
+        ownedHexes: [{x: 0, y: 0},{x: 0, y: 1},{x: 1, y: 0},{x: 1, y: 1},{x: 2, y: 0}],
         color: 'rgb(220, 252, 231)',
         hasUsedHexAction: false,
         hasUsedMinionAction: false
@@ -27,7 +27,7 @@ const initialPlayers = [
         id: 2,
         money: 100,
         minions: [],
-        ownedHexes: [{x: 7, y: 7},{x: 6, y: 7},{x: 5, y: 7},{x: 6, y: 6},{x: 7, y: 6}],
+        ownedHexes: [{x: 7, y: 7},{x: 7, y: 6},{x: 6, y: 7},{x: 5, y: 7},{x: 6, y: 6}],
         color: 'rgb(254, 202, 202)',
         hasUsedHexAction: false,
         hasUsedMinionAction: false
@@ -49,15 +49,25 @@ const GameBoard = () => {
         const dx = Math.abs(hex1.x - hex2.x);
         const dy = Math.abs(hex1.y - hex2.y);
 
-        if (hex1.x % 2 === 0) { // even column
-            return (dx === 1 && dy === 0) ||
-                (dx === 0 && dy === 1) ||
-                (dx === 1 && dy === 1 && hex1.y > hex2.y);
-        } else { // odd column
-            return (dx === 1 && dy === 0) ||
-                (dx === 0 && dy === 1) ||
-                (dx === 1 && dy === 1 && hex1.y < hex2.y);
+        // Same hex is not adjacent to itself
+        if (dx === 0 && dy === 0) return false;
+
+        // Direct vertical neighbors (same column, adjacent row)
+        if (dx === 0 && dy === 1) return true;
+
+        // For horizontal and diagonal neighbors, it depends on the column parity (even/odd)
+        if (dx === 1) {
+            if (hex1.x % 2 === 0) { // Even column
+                // Adjacent in same row or one row down
+                return dy === 0 || (dy === 1 && hex2.y > hex1.y);
+            } else { // Odd column
+                // Adjacent in same row or one row up
+                return dy === 0 || (dy === 1 && hex2.y < hex1.y);
+            }
         }
+
+        // Not adjacent if too far apart
+        return false;
     };
 
     const isAdjacent = (hex1, hex2) => {
@@ -167,7 +177,7 @@ const GameBoard = () => {
     };
 
     const PlayerPanel = ({ player, isCurrentPlayer }) => (
-        <div className={`player-panel w-64 bg-gradient-to-br ${isCurrentPlayer ? (player.id === 1 ? 'from-green-100 to-green-200' : 'from-red-100 to-red-200') : 'from-gray-100 to-gray-200'} p-4 flex flex-col gap-4 rounded-xl shadow-xl transition-all duration-300 ${isCurrentPlayer ? 'ring-4 ring-blue-500 transform scale-105' : 'opacity-80'}`}>
+        <div className={`player-left w-64 bg-gradient-to-br ${isCurrentPlayer ? (player.id === 1 ? 'from-green-100 to-green-200' : 'from-red-100 to-red-200') : 'from-gray-100 to-gray-200'} p-4 flex flex-col gap-4 rounded-xl shadow-xl transition-all duration-300 ${isCurrentPlayer ? 'ring-4 ring-blue-500 transform scale-105' : 'opacity-80'}`}>
             <div className={`flex flex-col items-center p-4 rounded-xl shadow-lg transform transition-transform duration-500 hover:scale-105`}
                  style={{ backgroundColor: player.color }}>
                 <div className="text-2xl font-bold mb-4 text-center">Player {player.id}</div>
@@ -319,7 +329,7 @@ const GameBoard = () => {
                                             fontSize="12"
                                             className="coordinate-label"
                                         >
-                                            {row+1},{col+1}
+                                            {col+1},{row+1}
                                         </text>
                                     </g>
                                 );
