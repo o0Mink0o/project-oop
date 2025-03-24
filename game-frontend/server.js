@@ -6,28 +6,34 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: "*",  // ✅ อนุญาตให้ client ทุกที่เชื่อมต่อ
+        origin: "*",
         methods: ["GET", "POST"]
     }
 });
 
 let playerCount = 0;
+const MAX_PLAYERS = 2;
 
 io.on('connection', (socket) => {
-    playerCount++;
-    console.log(`A user connected, current count: ${playerCount}`);
+    if (playerCount >= MAX_PLAYERS) {
+        socket.emit('roomFull'); // แจ้งให้ client ทราบว่าห้องเต็มแล้ว
+        socket.disconnect();
+        return;
+    }
 
-    // ส่งค่า playerCount ไปให้ทุก client
+    playerCount++;
+    console.log(`🔗 A user connected, current count: ${playerCount}`);
+
     io.emit('playerCountUpdate', playerCount);
 
     socket.on('disconnect', () => {
         playerCount--;
-        console.log(`User disconnected, current count: ${playerCount}`);
+        console.log(` User disconnected, current count: ${playerCount}`);
         io.emit('playerCountUpdate', playerCount);
     });
 
     socket.on('join', () => {
-        console.log('A player joined');
+        console.log(' A player joined');
         io.emit('playerCountUpdate', playerCount);
     });
 });

@@ -223,6 +223,7 @@ const GameBoard = () => {
                         <span className="ml-2 bg-white bg-opacity-20 px-2 py-1 rounded-md">${HEX_PRICE}</span>
                     </div>
                 </button>
+
                 <button
                     className={`action-button px-4 py-3 rounded-xl text-lg font-semibold shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl ${
                         !isCurrentPlayer ? 'bg-gray-300 cursor-not-allowed' :
@@ -231,6 +232,7 @@ const GameBoard = () => {
                     }`}
                     onClick={() => isCurrentPlayer && !player.hasUsedMinionAction && setPurchaseMode(prev => prev === 'minion' ? null : 'minion')}
                     disabled={!isCurrentPlayer || player.hasUsedMinionAction}
+
                 >
                     <div className="flex items-center justify-center">
                         <span>Buy Minion</span>

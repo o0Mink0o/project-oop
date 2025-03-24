@@ -1,0 +1,18 @@
+.waiting-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: #282c34;
+    color: white;
+}
+
+.waiting-page h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.waiting-page p {
+    font-size: 1.5rem;
+}

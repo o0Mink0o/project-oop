@@ -4,6 +4,7 @@ import StartPage from './components/StartPage';
 import ModeSelectionPage from './components/ModeSelectionPage';
 import PlayerConfigPage from './components/PlayerConfigPage';
 import GameBoardPage from './components/GameBoardPage';
+import WaitingPage from './components/WaitingPage';
 
 const App = () => {
     const [playersConfig, setPlayersConfig] = useState([]);
@@ -19,7 +20,8 @@ const App = () => {
     return (
         <Routes>
             <Route path="/" element={<StartPage />} />
-            <Route path="/mode-selection" element={<ModeSelectionPage />} />
+            <Route path="/Waiting" element={<WaitingPage />} />
+            <Route path="/mode" element={<ModeSelectionPage />} />
             <Route
                 path="/player-config/:playerNumber"
                 element={<PlayerConfigPage onSubmit={handleSubmitConfig} />}
@@ -32,8 +34,12 @@ const App = () => {
                     boardData={Array(64).fill('')}
                 />}
             />
+            <Route path="/waiting" element={<WaitingPage />} />
+            <Route path="/start" element={<h1>Game Started!</h1>} /> {/* ✅ เพิ่ม Route นี้ */}
         </Routes>
     );
 };
 
 export default App;
+
+
