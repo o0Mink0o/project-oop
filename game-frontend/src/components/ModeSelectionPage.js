@@ -11,11 +11,62 @@ const ModeSelectionPage = () => {
     const [animateIn, setAnimateIn] = useState(false);
 
     useEffect(() => {
-        // Trigger entrance animation after component mounts
         setTimeout(() => {
             setAnimateIn(true);
         }, 100);
     }, []);
+
+    const handleBvsB = () =>{
+        fetch('http://localhost:8080/api/mode', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify("BvsB"),
+        })
+            .then(() => {
+                console.log('Mode set to BOT_VS_BOT');
+                navigate('/player-config/1');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    };
+
+    const handlePvsB = () =>{
+        fetch('http://localhost:8080/api/mode', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ mode: 'PvsB' }),
+        })
+            .then(() => {
+                console.log('Mode set to BOT_VS_PLAYER');
+                navigate('/player-config/2');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    };
+
+    const handlePvsP = () =>{
+        fetch('http://localhost:8080/api/mode', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ mode: 'PvsP' }),
+        })
+            .then(() => {
+                console.log('Mode set to PLAYER_VS_PLAYER');
+                navigate('/player-config/3');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    };
+
 
     return (
         <div className="mode-selection-page">
@@ -29,7 +80,7 @@ const ModeSelectionPage = () => {
 
                 <div className="mode-options-container">
                     <div className="mode-options">
-                        <div className="mode-option" onClick={() => navigate('/player-config/1')}>
+                        <div className="mode-option" onClick={handleBvsB}>
                             <div className="mode-image-container">
                                 <img src={botVsBotImg} alt="Bot vs Bot" className="mode-image" />
                             </div>
@@ -39,7 +90,7 @@ const ModeSelectionPage = () => {
                             </button>
                         </div>
 
-                        <div className="mode-option" onClick={() => navigate('/player-config/2')}>
+                        <div className="mode-option" onClick={handlePvsB}>
                             <div className="mode-image-container">
                                 <img src={botVsPlayerImg} alt="Bot vs Player" className="mode-image" />
                             </div>
@@ -49,7 +100,7 @@ const ModeSelectionPage = () => {
                             </button>
                         </div>
 
-                        <div className="mode-option" onClick={() => navigate('/player-config/3')}>
+                        <div className="mode-option" onClick={handlePvsP}>
                             <div className="mode-image-container">
                                 <img src={playerVsPlayerImg} alt="Player vs Player" className="mode-image" />
                             </div>
