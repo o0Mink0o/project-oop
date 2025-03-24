@@ -4,6 +4,7 @@ import StartPage from './components/StartPage';
 import ModeSelectionPage from './components/ModeSelectionPage';
 import PlayerConfigPage from './components/PlayerConfigPage';
 import GameBoardPage from './components/GameBoardPage';
+import WaitingPage from './components/WaitingPage';
 
 const App = () => {
     const [playersConfig, setPlayersConfig] = useState([]);
@@ -32,8 +33,12 @@ const App = () => {
                     boardData={Array(64).fill('')}
                 />}
             />
+            <Route path="/waiting" element={<WaitingPage />} />
+            <Route path="/start" element={<h1>Game Started!</h1>} /> {/* ✅ เพิ่ม Route นี้ */}
         </Routes>
     );
 };
 
 export default App;
+
+

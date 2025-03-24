@@ -26,19 +26,12 @@ const StartPage = () => {
                 <div className="button-group">
                     <button
                         className="btn btn-start"
-                        onClick={() => navigate('/mode-selection')}
+                        onClick={() => navigate('/waiting')} // 🔹 เปลี่ยนไปที่ "/waiting"
                     >
                         Start Game
                         <span className="btn-effect"></span>
                     </button>
 
-                    <button
-                        className="btn btn-home"
-                        onClick={() => navigate('/')}
-                    >
-                        Home
-                        <span className="btn-effect"></span>
-                    </button>
                 </div>
             </div>
         </div>

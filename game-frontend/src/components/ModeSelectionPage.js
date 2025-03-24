@@ -62,10 +62,6 @@ const ModeSelectionPage = () => {
                 </div>
 
                 <div className="navigation-buttons">
-                    <button className="btn btn-home" onClick={() => navigate('/')}>
-                        Home
-                        <span className="btn-effect"></span>
-                    </button>
                     <BackButton className="back-button" />
                 </div>
             </div>
