@@ -100,6 +100,7 @@ const GameBoard = () => {
     };
 
     const handleHexClick = (x, y) => {
+        // Hex purchase logic
         if (purchaseMode === 'hex' && !players[currentPlayer].hasUsedHexAction) {
             if (isHexAvailableForPurchase(x, y)) {
                 setSelectedHex({ x, y });
@@ -112,7 +113,9 @@ const GameBoard = () => {
                     });
                 }
             }
-        } else if (purchaseMode === 'minion' && selectedMinionType !== null && !players[currentPlayer].hasUsedMinionAction) {
+        }
+        // Minion purchase logic
+        else if (purchaseMode === 'minion' && selectedMinionType !== null && !players[currentPlayer].hasUsedMinionAction) {
             if (players[currentPlayer].ownedHexes.some(h => h.x === x && h.y === y)) {
                 const minionPrice = MINION_TYPES[selectedMinionType].price;
                 if (players[currentPlayer].money >= minionPrice) {
@@ -132,7 +135,6 @@ const GameBoard = () => {
             }
         }
     };
-
     const confirmHexPurchase = () => {
         if (selectedHex && players[currentPlayer].money >= HEX_PRICE) {
             setPlayers(prev => {
@@ -149,6 +151,7 @@ const GameBoard = () => {
     };
 
     const endTurn = () => {
+        // End turn logic
         setCurrentPlayer((prev) => (prev + 1) % 2);
         setTurn(prev => prev + 1);
         setPurchaseMode(null);
@@ -189,6 +192,7 @@ const GameBoard = () => {
                         <span className="font-bold">${player.money}</span>
                     </div>
                     <div className="flex justify-between items-center text-xl p-2 bg-white bg-opacity-50 rounded-lg">
+
                         <span>👥</span>
                         <span className="font-bold">{player.minions.length}</span>
                     </div>
@@ -204,7 +208,7 @@ const GameBoard = () => {
                     className={`action-button px-4 py-3 rounded-xl text-lg font-semibold shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl ${
                         !isCurrentPlayer ? 'bg-gray-300 cursor-not-allowed' :
                             player.hasUsedHexAction ? 'bg-gray-400 cursor-not-allowed' :
-                                purchaseMode === 'hex' ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white' : 'bg-gradient-to-r from-indigo-400 to-purple-500 text-white'
+                                purchaseMode === 'hex' ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white' : 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white'
                     }`}
                     onClick={() => {
                         if (isCurrentPlayer && !player.hasUsedHexAction) {
@@ -230,7 +234,7 @@ const GameBoard = () => {
                     className={`action-button px-4 py-3 rounded-xl text-lg font-semibold shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl ${
                         !isCurrentPlayer ? 'bg-gray-300 cursor-not-allowed' :
                             player.hasUsedMinionAction ? 'bg-gray-400 cursor-not-allowed' :
-                                purchaseMode === 'minion' ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white' : 'bg-gradient-to-r from-pink-500 to-rose-500 text-white'
+                                purchaseMode === 'minion' ? 'bg-gradient-to-r from-orange-500 to-amber-600 text-white' : 'bg-gradient-to-r from-pink-500 to-rose-600 text-white'
                     }`}
                     onClick={() => isCurrentPlayer && !player.hasUsedMinionAction && setPurchaseMode(prev => prev === 'minion' ? null : 'minion')}
                     disabled={!isCurrentPlayer || player.hasUsedMinionAction}
@@ -239,6 +243,8 @@ const GameBoard = () => {
                         <span>Buy Minion</span>
                     </div>
                 </button>
+
+
             </div>
         </div>
     );
