@@ -1,3 +1,5 @@
+package gamestate;
+
 public class MinionType {
     public final String name;
     public final int def;

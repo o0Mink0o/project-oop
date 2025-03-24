@@ -1,3 +1,5 @@
+package gamestate;
+
 import java.util.HashMap;
 import java.util.Map;
 

@@ -1,3 +1,5 @@
+package gamestate;
+
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -51,7 +53,7 @@ public class ReadStrategy {
         return null;
     }
 
-    protected static Strategy safeParse(String input) {
+    public static Strategy safeParse(String input) {
         try {
             return new StrategyParser(new Tokenizer(input)).parse();
         } catch (SyntaxError e) {

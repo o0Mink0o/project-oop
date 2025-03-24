@@ -1,3 +1,5 @@
+package gamestate;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,7 +10,7 @@ public class Minion {
     final Player ownby;
     final Strategy strategy;
     private Environment env = new Environment();
-    final static Map<String, MinionType> minionTypeMap = new HashMap<>();
+    public final static Map<String, MinionType> minionTypeMap = new HashMap<>();
 
     public Environment getEnv() { return env; }
 

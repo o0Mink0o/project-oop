@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import SockJS from 'sockjs-client';
-import { Client } from '@stomp/stompjs';  // ✅ Correct import
+import { Client } from '@stomp/stompjs';
 import { selectWebsocket, setWebSocketClient, setConnectionStatus } from '../stores/slices/webSocketSlice';
 import { addMessageToRoom } from "../stores/slices/roomSlice";
 
@@ -21,7 +21,7 @@ export const useWebSocket = () => {
 
     const unsubscribe = (subscription) => {
         if (client && isConnected && subscription) {
-            subscription.unsubscribe();  // ✅ @stomp/stompjs uses unsubscribe() directly
+            subscription.unsubscribe();
             console.log(`Unsubscribed`);
         } else {
             console.log("No active WebSocket connection to unsubscribe.");
@@ -31,7 +31,7 @@ export const useWebSocket = () => {
     const sendMessage = (destination, message) => {
         if (client && isConnected) {
             console.log("send", JSON.stringify(message));
-            client.publish({ destination: `/app${destination}`, body: JSON.stringify(message) });  // ✅ @stomp/stompjs uses publish
+            client.publish({ destination: `/app${destination}`, body: JSON.stringify(message) });
         } else {
             console.log("No active WebSocket connection to send message.");
         }
@@ -48,7 +48,7 @@ export const useWebSocket = () => {
                 },
                 debug: (str) => console.log('STOMP DEBUG:', str),
             });
-            stompClient.activate();  // ✅ Required to start the connection
+            stompClient.activate();
         } catch (e) {
             console.log(e);
         }

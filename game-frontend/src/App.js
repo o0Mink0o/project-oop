@@ -14,7 +14,7 @@ const App = () => {
 
     const handleSubmitConfig = (minions) => {
         setPlayersConfig([...playersConfig, minions]);
-        if (playersConfig.length === 1) {
+        if (playersConfig.length === 0) {
             navigate('/game-board');
         }
     };

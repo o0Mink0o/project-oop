@@ -1,3 +1,5 @@
+package gamestate;
+
 public class Hex {
     private Player ownby;
     private Minion Isminion;

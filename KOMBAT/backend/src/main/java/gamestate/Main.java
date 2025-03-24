@@ -1,3 +1,5 @@
+package gamestate;
+
 import java.util.List;
 import java.util.Scanner;
 

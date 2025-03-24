@@ -1,7 +1,9 @@
+package gamestate;
+
 import java.util.ArrayList;
 import java.util.List;
 
-class StrategyParser {
+public class StrategyParser {
     private final Tokenizer tokenizer;
 
     public StrategyParser(Tokenizer tokenizer) {

@@ -17,6 +17,19 @@ const ModeSelectionPage = () => {
         }, 100);
     }, []);
 
+    const handleBvsB = () =>{
+
+    };
+
+    const handleBvsP = () =>{
+
+    };
+
+    const handlePvsP = () =>{
+
+    };
+
+
     return (
         <div className="mode-selection-page">
             <div className="overlay"></div>
@@ -29,7 +42,7 @@ const ModeSelectionPage = () => {
 
                 <div className="mode-options-container">
                     <div className="mode-options">
-                        <div className="mode-option" onClick={() => navigate('/player-config/1')}>
+                        <div className="mode-option" onClick={handleBvsB)}>
                             <div className="mode-image-container">
                                 <img src={botVsBotImg} alt="Bot vs Bot" className="mode-image" />
                             </div>
@@ -39,7 +52,7 @@ const ModeSelectionPage = () => {
                             </button>
                         </div>
 
-                        <div className="mode-option" onClick={() => navigate('/player-config/2')}>
+                        <div className="mode-option" onClick={handleBvsP}>
                             <div className="mode-image-container">
                                 <img src={botVsPlayerImg} alt="Bot vs Player" className="mode-image" />
                             </div>
@@ -49,7 +62,7 @@ const ModeSelectionPage = () => {
                             </button>
                         </div>
 
-                        <div className="mode-option" onClick={() => navigate('/player-config/3')}>
+                        <div className="mode-option" onClick={handlePvsP)}>
                             <div className="mode-image-container">
                                 <img src={playerVsPlayerImg} alt="Player vs Player" className="mode-image" />
                             </div>
