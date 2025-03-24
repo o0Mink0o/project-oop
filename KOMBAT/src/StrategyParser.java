@@ -8,6 +8,19 @@ class StrategyParser {
         this.tokenizer = tokenizer;
     }
 
+    public static boolean validate(String strategyText) {
+        try {
+            StrategyParser parser = new StrategyParser(new Tokenizer(strategyText));
+            parser.parse(); // ถ้า syntax ถูกต้อง จะไม่มี exception
+            return true;
+        } catch (SyntaxError e) {
+            System.err.println("❌ Syntax Error: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("❌ Unexpected Error: " + e.getMessage());
+        }
+        return false;
+    }
+
     public Strategy parse() throws SyntaxError {
         List<Statement> statements = new ArrayList<>();
         while (tokenizer.hasNextToken()) {
