@@ -5,6 +5,7 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/test-websocket/pom.xml" />
+        <option value="$PROJECT_DIR$/KOMBAT/backend/pom.xml" />
       </list>
     </option>
   </component>
