@@ -51,7 +51,7 @@ public class ReadStrategy {
         return null;
     }
 
-    private static Strategy safeParse(String input) {
+    protected static Strategy safeParse(String input) {
         try {
             return new StrategyParser(new Tokenizer(input)).parse();
         } catch (SyntaxError e) {
