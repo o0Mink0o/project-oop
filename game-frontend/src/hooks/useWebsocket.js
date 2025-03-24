@@ -1,7 +1,8 @@
-import { useDispatch , useSelector } from 'react-redux';
-import { selectWebsocket, setWebSocketClient, setConnectionStatus} from '../stores/slices/websocketSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import SockJS from 'sockjs-client';
-import Stomp from 'stompjs';
+import { Client } from '@stomp/stompjs';  // ✅ Correct import
+import { selectWebsocket, setWebSocketClient, setConnectionStatus } from '../stores/slices/webSocketSlice';
+import { addMessageToRoom } from "../stores/slices/roomSlice";
 
 export const useWebSocket = () => {
     const dispatch = useDispatch();
@@ -20,8 +21,8 @@ export const useWebSocket = () => {
 
     const unsubscribe = (subscription) => {
         if (client && isConnected && subscription) {
-            client.unsubscribe(subscription.id);
-            console.log(`Unsubscribed from ${subscription.id}`);
+            subscription.unsubscribe();  // ✅ @stomp/stompjs uses unsubscribe() directly
+            console.log(`Unsubscribed`);
         } else {
             console.log("No active WebSocket connection to unsubscribe.");
         }
@@ -30,7 +31,7 @@ export const useWebSocket = () => {
     const sendMessage = (destination, message) => {
         if (client && isConnected) {
             console.log("send", JSON.stringify(message));
-            client.send(`/app${destination}`, {}, JSON.stringify(message));
+            client.publish({ destination: `/app${destination}`, body: JSON.stringify(message) });  // ✅ @stomp/stompjs uses publish
         } else {
             console.log("No active WebSocket connection to send message.");
         }
@@ -38,10 +39,16 @@ export const useWebSocket = () => {
 
     const connect = () => {
         try {
-            const webSocket = new SockJS(`${serverUrl}/ws`);
-            const stompClient = Stomp.over(webSocket);
-            stompClient.connect({}, () => onConnected(stompClient));
-            stompClient.debug = () => {}; // Disable debug logs
+            const stompClient = new Client({
+                webSocketFactory: () => new SockJS(`${serverUrl}/ws`),
+                reconnectDelay: 5000,
+                onConnect: () => onConnected(stompClient),
+                onStompError: (frame) => {
+                    console.error('STOMP Error:', frame);
+                },
+                debug: (str) => console.log('STOMP DEBUG:', str),
+            });
+            stompClient.activate();  // ✅ Required to start the connection
         } catch (e) {
             console.log(e);
         }
@@ -49,10 +56,9 @@ export const useWebSocket = () => {
 
     const disconnect = () => {
         if (client && isConnected) {
-            client.disconnect(() => {
-                dispatch(setWebSocketClient(null));
-                dispatch(setConnectionStatus(false));
-            });
+            client.deactivate();
+            dispatch(setWebSocketClient(null));
+            dispatch(setConnectionStatus(false));
             console.log("WebSocket disconnected");
         } else {
             console.log("No active WebSocket connection to disconnect.");
