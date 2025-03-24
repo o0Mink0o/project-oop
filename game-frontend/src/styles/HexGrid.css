@@ -84,6 +84,32 @@
     transform: translateY(0);
 }
 
+/* Minion Button Styles */
+.minion-btn {
+    transition: all 0.2s ease;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(90deg, #ff7eb3, #ff758c);
+    color: white;
+    box-shadow: 0 4px 10px rgba(255, 118, 118, 0.5);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.minion-btn:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 6px 15px rgba(255, 118, 118, 0.8);
+    filter: brightness(1.1);
+}
+
+.minion-btn:active {
+    transform: translateY(0);
+}
+
 /* Minion icon styles */
 .minion-icon {
     transition: all 0.3s ease;
@@ -149,9 +175,11 @@
 @keyframes pulse-available {
     0%, 100% {
         opacity: 0.1;
+        transform: scale(1);
     }
     50% {
         opacity: 0.3;
+        transform: scale(1.05);
     }
 }
 
@@ -188,4 +216,33 @@
         font-size: 14px;
         padding: 10px 16px;
     }
+}
+
+/* เพิ่ม CSS สำหรับปุ่มซื้อ Minion */
+.selected-minion-btn {
+    background: linear-gradient(to right, #ff7e5f, #feb47b); /* สีสวยๆ สำหรับปุ่มเลือก */
+    transform: scale(1.05);
+}
+
+.deselected-minion-btn {
+    background: linear-gradient(to right, #6c757d, #343a40); /* สีเทาสำหรับปุ่มที่ไม่เลือก */
+}
+
+.minion-btn.selected {
+    background: linear-gradient(to right, #ff7e5f, #feb47b); /* สีที่เลือกแล้ว */
+    transform: scale(1.05);
+}
+
+.minion-btn.deselected {
+    background: linear-gradient(to right, #6c757d, #343a40); /* สีที่ไม่เลือก */
+}
+
+.minion-btn:hover {
+    background: linear-gradient(to right, #495057, #343a40); /* สีที่เปลี่ยนเมื่อ hover */
+}
+
+/* Focus styles for accessibility */
+.minion-btn:focus, .action-button:focus {
+    outline: 2px solid #ff7eb3;  /* เพิ่มเส้นขอบสำหรับผู้ใช้ที่ใช้คีย์บอร์ด */
+    outline-offset: 4px;
 }
