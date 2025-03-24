@@ -9,7 +9,7 @@ import java.util.Map;
 public class GameConfig {
     private static GameConfig instance; // Singleton Instance
     private final Map<String, Long> config = new HashMap<>();
-    private static final String CONFIG_FILE = "KOMBAT/src/config.txt"; // กำหนดไฟล์คอนฟิก
+    private static final String CONFIG_FILE = "KOMBAT/backend/src/main/java/gamestate/config.txt"; // กำหนดไฟล์คอนฟิก
 
     // Constructor (private เพื่อบังคับให้ใช้ getInstance())
     private GameConfig() {

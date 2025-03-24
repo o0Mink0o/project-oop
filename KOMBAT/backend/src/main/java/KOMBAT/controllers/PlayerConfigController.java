@@ -14,7 +14,7 @@ import java.util.Map;
 public class PlayerConfigController {
 
     @PostMapping("/minion-types")
-    public ResponseEntity<Map<String, String>> addMinionTypes(@RequestBody List<PlayerConfig> minions) {
+    public void addMinionTypes(@RequestBody List<PlayerConfig> minions) {
         for (PlayerConfig minion : minions) {
             String name = minion.getName();
             String defense = minion.getDefense();
@@ -33,7 +33,6 @@ public class PlayerConfigController {
 
         Map<String, String> response = new HashMap<>();
         response.put("message", "Minion types created successfully!");
-        return ResponseEntity.ok(response);
     }
 
 }

@@ -30,7 +30,6 @@ const PlayerConfigPage = ({ playerNumber, onSubmit }) => {
 
     // ฟังก์ชันส่งข้อมูล
     const handleSubmit = () => {
-        console.log("Minions before submit:", minions);  // ตรวจสอบค่าก่อนส่ง
         fetch('http://localhost:8080/api/minion-types', {
             method: 'POST',
             headers: {
