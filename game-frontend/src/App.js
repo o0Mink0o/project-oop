@@ -20,7 +20,8 @@ const App = () => {
     return (
         <Routes>
             <Route path="/" element={<StartPage />} />
-            <Route path="/mode-selection" element={<ModeSelectionPage />} />
+            <Route path="/Waiting" element={<WaitingPage />} />
+            <Route path="/mode" element={<ModeSelectionPage />} />
             <Route
                 path="/player-config/:playerNumber"
                 element={<PlayerConfigPage onSubmit={handleSubmitConfig} />}

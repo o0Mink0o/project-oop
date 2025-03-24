@@ -61,9 +61,9 @@ const ModeSelectionPage = () => {
                     </div>
                 </div>
 
-                <div className="navigation-buttons">
-                    <BackButton className="back-button" />
-                </div>
+                {/*<div className="navigation-buttons">*/}
+                {/*    <BackButton className="back-button" />*/}
+                {/*</div>*/}
             </div>
         </div>
     );

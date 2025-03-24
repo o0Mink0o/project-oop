@@ -26,13 +26,25 @@ const WaitingPage = () => {
         };
     }, []);
 
+
     useEffect(() => {
         console.log(` Player Count Changed: ${playerCount}`);
         if (playerCount >= 2) {
             console.log(' Navigating to /start');
-            navigate('/start');
+            navigate('/mode');
         }
     }, [playerCount, navigate]);
+    useEffect(() => {
+        socket.on('roomFull', () => {
+            alert('ห้องเต็มแล้ว! โปรดลองใหม่ภายหลัง');
+            navigate('/'); // ส่งกลับไปหน้าเริ่มต้น
+        });
+
+        return () => {
+            socket.off('roomFull');
+        };
+    }, [navigate]); //  เพิ่ม navigate ใน dependency array
+
 
     return (
         <div className="waiting-page">
@@ -41,5 +53,6 @@ const WaitingPage = () => {
         </div>
     );
 };
+
 
 export default WaitingPage;
