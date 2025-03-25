@@ -2,7 +2,6 @@ package KOMBAT.controllers;
 
 import KOMBAT.models.PlayerConfig;
 import gamestate.*;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
