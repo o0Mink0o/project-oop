@@ -1,10 +1,12 @@
-import React, { useState, useRef } from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import BackButton from './BackButton';
 import '../styles/PlayerConfigPage.css';
+import {useNavigate} from "react-router-dom";
 
 const PlayerConfigPage = ({ playerNumber, onSubmit }) => {
     const [minions, setMinions] = useState([{ name: '', defense: '', strategy: '' }]);
     const scrollContainerRef = useRef(null);
+    const navigate = useNavigate();
 
     // ฟังก์ชันอัปเดตข้อมูล Minion
     const handleChange = (index, field, value) => {
@@ -37,10 +39,12 @@ const PlayerConfigPage = ({ playerNumber, onSubmit }) => {
             },
             body: JSON.stringify(minions), // ส่งข้อมูล Minions ที่เก็บใน state
         })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Minion type added:', data);
-                onSubmit(minions); // หากมีฟังก์ชันหลังจากส่งเสร็จ
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                console.log('Minion types added successfully');
+                navigate('/game-board');
             })
             .catch(error => {
                 console.error('Error:', error);

@@ -2,6 +2,7 @@ package KOMBAT.controllers;
 
 import KOMBAT.models.PlayerConfig;
 import gamestate.*;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -29,9 +30,6 @@ public class PlayerConfigController {
             System.out.println(Minion.minionTypeMap.keySet());
             System.out.println("New Minion type added: " + name);
         }
-
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "Minion types created successfully!");
     }
 
 }
