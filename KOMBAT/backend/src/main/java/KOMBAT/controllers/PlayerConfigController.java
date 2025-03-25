@@ -20,11 +20,9 @@ public class PlayerConfigController {
             String defense = minion.getDefense();
             String strategy = minion.getStrategy();
 
-            // Create Strategy from string
             Strategy parsedStrategy = ReadStrategy.safeParse(strategy);
             System.out.println("Minion Type: " + name + " Def: " + defense + " Strategy: " + parsedStrategy);
 
-            // Add to minion map
             MinionType newMinionType = new MinionType(name, Integer.parseInt(defense), parsedStrategy);
             Minion.minionTypeMap.put(name, newMinionType);
             System.out.println(Minion.minionTypeMap.keySet());

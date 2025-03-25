@@ -60,7 +60,7 @@ const ModeSelectionPage = () => {
         })
             .then(() => {
                 console.log('Mode set to PLAYER_VS_PLAYER');
-                navigate('/player-config/3');
+                navigate('/Waiting');
             })
             .catch(error => {
                 console.error('Error:', error);

@@ -25,6 +25,7 @@ const App = () => {
             <WebSocketProvider>
                 <Routes>
                     <Route path="/" element={<StartPage />} />
+                    <Route path="/Waiting" element={<WaitingPage />} />
                     <Route path="/mode-selection" element={<ModeSelectionPage />} />
                     <Route
                         path="/player-config/:playerNumber"

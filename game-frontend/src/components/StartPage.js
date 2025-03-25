@@ -26,7 +26,6 @@ const StartPage = () => {
                 <div className="button-group">
                     <button
                         className="btn btn-start"
-                        // onClick={() => navigate('/waiting')} // 🔹 เปลี่ยนไปที่ "/waiting"
                         onClick={() => navigate('/mode-selection')}
                     >
                         Start Game
